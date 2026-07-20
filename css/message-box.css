@@ -1,18 +1,28 @@
 /* Message Box */
 .message-box {
-	--color-message-box: #ffc;
+	flexbox: 1 1 auto;
+	--color-message-box: #2a273f;
+	--color-message-box-text: #e0def4;
 
 	display: block;
+	width: calc(100% + 3rem);
+	margin: -1.5rem -1.5rem 1.5rem;
+	padding: 1em 1.5rem;
 	background-color: var(--color-message-box);
-	color: var(--color-gray-90);
-	padding: 1em 0.625em; /* 16px 10px /16 */
-}
-.message-box ol {
-	margin-top: 0;
+	color: var(--color-message-box-text);
+	box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-	.message-box {
-		--color-message-box: #082840;
-	}
+.message-box a,
+.message-box a:visited {
+	color: var(--color-message-box-text);
+}
+
+.message-box a:hover,
+.message-box a:active {
+	color: #c4b1ff;
+}
+
+.message-box ol {
+	margin-top: 0;
 }

@@ -1,0 +1,102 @@
+/* Import a handwriting font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
+
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.page {
+	height: 100%;
+  background-color: var(--crust)!important;
+  background-image: radial-gradient(#d1c7bd 15%, transparent 15%);
+  background-size: 15px 15px;
+  margin: 10px 10px 20px 10px;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+/* Flexbox container to align notes horizontally */
+.sticky-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px;
+}
+
+/* Base sticky note styling */
+.sticky-note {
+  width: 250px;
+  min-height: 250px;
+  padding: 25px;
+  color: var(--text);
+
+  /* Soft, realistic paper shadow */
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+
+  /* Subtle rotation to look scattered naturally */
+  transform: rotate(-2deg);
+  transition: transform 0.15s linear, box-shadow 0.15s linear;
+}
+
+/* Alternate rotation for every second note to enhance randomness */
+.sticky-note:nth-child(even) {
+  transform: rotate(3deg);
+}
+
+/* Rotate through the available color themes by note position */
+.sticky-note:nth-child(4n + 1) {
+  background: #f6c177;
+}
+
+.sticky-note:nth-child(4n + 2) {
+  background: #9ccfd8;
+}
+
+.sticky-note:nth-child(4n + 3) {
+  background: #ea9a97;
+}
+
+.sticky-note:nth-child(4n) {
+  background: #c4a7e7;
+}
+
+/* Lift effect when hovering over a note */
+.sticky-note:hover {
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05) rotate(0deg);
+  position: relative;
+  z-index: 10;
+}
+
+/* Sticky note content layout */
+.sticky-note h3 {
+  color: var(--text);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+  padding-bottom: 5px;
+}
+
+.sticky-note p {
+  line-height: 1.5;
+}
+
+/* Color Themes */
+.yellow {
+  background: #feff9c;
+}
+
+.blue {
+  background: #7afcff;
+}
+
+.pink {
+  background: #ff7eb9;
+}
+.green {
+  background: #b9ff7e;
+}

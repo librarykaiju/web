@@ -1,0 +1,9 @@
+.that-happened {
+   background-color: var(--sidebar-bg);
+   margin: 0 auto;
+   padding: 1rem;
+   box-sizing: border-box;
+   color: var(--sidebar-text);
+   border-radius: 8px;
+   margin-bottom: 1rem;
+}

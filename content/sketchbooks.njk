@@ -1,0 +1,16 @@
+---
+title: Sketchbooks
+eleventyNavigation:
+  key: "03 Sketchbooks"
+  order: 4
+---
+<h1>Sketchbook Pages</h1>
+
+{% set postslist = collections.sketchbooks %}
+{% include "postslist.njk" %}
+
+<div class="gallery">
+  {% for post in collections.sketchbooks | reverse %}
+  <a href="{{ post.url }}"><img src="/img/sketches/{{ post.data.coverImage }}" loading="lazy" /></a> {{ post.data.dateString }}
+  {% endfor %}
+</div>

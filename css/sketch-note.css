@@ -1,0 +1,30 @@
+.image-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hover-text {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7); /* Black overlay with 70% opacity */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease; /* Smooth fade effect */
+}
+
+.image-container:hover .hover-text {
+  opacity: 1; /* Text becomes visible on hover */
+}

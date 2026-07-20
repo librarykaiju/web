@@ -1,0 +1,47 @@
+/* The outer container hides any overflow text */
+.marquee {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+/* The tracking row holds our list items */
+.marquee-content {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-around;
+  min-width: max-content;
+  gap: 2rem;
+
+  /* Bind the infinite animation */
+  animation: scroll 15s linear infinite;
+}
+
+/* Pause the animation on hover for better user experience */
+.marquee:hover .marquee-content {
+  animation-play-state: paused;
+}
+
+/* The magic keyframe that creates the seamless loop */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 2rem)); /* Matches min-width + the gap */
+  }
+}
+
+/* Optional text styling */
+.marquee-content span {
+  flex-shrink: 0;
+  color: var(--sidebar-text);
+  font-family: lacquer;
+  font-weight: regular;
+  font-size: 1 rem;
+  white-space: nowrap;
+}

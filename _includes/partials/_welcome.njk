@@ -1,0 +1,39 @@
+{% if page.url == "/" or page.url == "/index.html" %}
+<style>{% include "css/marquee.css" %}</style>
+<div class="main">
+      <div class="marquee">
+        <!-- Group 1 -->
+        <div class="marquee-content">
+          <span>Because what we make belongs to us. </span>
+          <span>Because our voices won't be silenced.</span>
+          <span>Because the internet should be open to all. </span>
+
+        </div>
+
+        <!-- Group 2 (Exact Duplicate) -->
+        <div class="marquee-content" aria-hidden="true">
+          <span>Because what we make belongs to us. </span>
+          <span>Because our voices won't be silenced.</span>
+          <span>Because the internet should be open to all. </span>
+        </div>
+      </div>
+
+<style>{% include "css/welcome.css" %}</style>
+<div class="welcome">
+	<div class="home">
+        <div class="bio">
+
+        </div>
+        <div class="welcome">
+
+          <span class="howdy"> Howdy</span><br>
+          <P> I'm a librarian living in Oklahoma. When I'm not spending time with my family, or busy with my own projects, I do my best to encourage others to live curious, creative lives. </P>
+          <br>
+          <p> Welcome to my space.</p><br>
+        </div>
+
+      </div>
+      
+
+</div>
+{% endif %}
