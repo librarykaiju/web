@@ -1,12 +1,10 @@
----js
-const eleventyNavigation = {
-	key: "04.01 books",
-		parent: "04 media logs",
-		order: 1
-};
 ---
-<h1>Journal Pages</h1>
-
+layout: layouts/base.njk
+permalink: /logs/books/
+eleventyNavigation:
+  key: 04.01 Books
+  parent: 04 Logs
+---
 <h1>My Library</h1>
 
 {% set postslist = collections.books %}

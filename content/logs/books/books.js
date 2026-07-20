@@ -1,6 +1,6 @@
 export default {
 	tags: [
-		"logs-books"
+		"books"
 	],
 	parent: [
 		"logs"

@@ -1,13 +1,16 @@
 .home {
   display: flex;
+  flex-direction: column;
   margin-bottom: 10px;
   margin-right: 10px;
   padding: 1rem;
+  gap: 1rem;
 }
+
 .howdy {
   flex-direction: column;
   font-family: special elite;
-  font-size: clamp(4rem, 5vw, 8rem);
+  font-size: clamp(2rem, 5vw, 8rem);
   color: var(--yellow);
 }
 
@@ -15,15 +18,33 @@
   flex-direction: column;
   font-family: special elite;
   font-size: larger;
-  flex-direction: column;
   color: var(--sidebar-text);
   line-height: 1.2;
 }
+
 .bio {
   flex-direction: column;
-  min-width: 300px;
-  min-height: 300px;
+  min-width: 250px;
+  min-height: 250px;
   background: rgba(255, 255, 255, 0.12);
   background-image: var(--bio);
-  margin-right: 10px;
+}
+
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+  .home {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .bio {
+    min-width: 300px;
+    min-height: 300px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .howdy {
+    font-size: clamp(4rem, 5vw, 8rem);
+  }
 }

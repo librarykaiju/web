@@ -128,6 +128,9 @@ export default async function(eleventyConfig) {
 	// eleventyConfig.setServerPassthroughCopyBehavior("passthrough");
 };
 
+
+
+
 export const config = {
 	// Control which files Eleventy will process
 	// e.g.: *.md, *.njk, *.html, *.liquid
@@ -151,7 +154,9 @@ export const config = {
 		includes: "../_includes",  // default: "_includes" (`input` relative)
 		data: "../_data",          // default: "_data" (`input` relative)
 		output: "_site"
-	},
+	}
+	
+	,
 
 	// -----------------------------------------------------------------
 	// Optional items:

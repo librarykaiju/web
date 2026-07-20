@@ -10,7 +10,7 @@
 
 	--text-color: var(--text);
 	
-
+	--bio: url('/img/sketches/32bitme.png');
 	--syntax-tab-size: 2;
 
  	--sidebar-bg: rgb(35, 33, 54);
@@ -156,7 +156,7 @@ iframe {
 }
 
 p:last-child {
-	margin-bottom: 0;
+	margin-bottom: 1.5;
 }
 p {
 	line-height: 1.5;
@@ -177,32 +177,19 @@ a[href]:active {
 	color: var(--nav-text);
 }
 
-main :first-child {
-	margin-top: 0;
-}
-
-.main {
-  flex: 2;
-  min-width: 0;
-  min-height: 100vh;
-}
-
-
 .container {
 	display: flex;
-	width: 100%;
-	max-width: 100%;
-	overflow-x: hidden;
-	}
+	flex-wrap: wrap;
+}
 
 .sidebar {
-	flex: .5;
+	display: flex;
 	flex-direction: column;
+	flex: 1 1 100%;
 	gap: 1.5rem;
-	min-height: 100vh;
 	top: 0;
-	padding: 2rem 1rem 2rem 1rem;
-	position: sticky;
+	padding: 2rem 1rem;
+	position: relative;
 	color: var(--text);
 }
 
@@ -219,27 +206,29 @@ main :first-child {
   color: var(--sidebar-text);
 }
 
-.page {
-	font-family: "Lacquer" !important;
-  min-height: 100%;
-  background-color: var(--crust)!important;
-  background-image: radial-gradient var(--text) 15%;
-  background-size: 1.5rem 1.5rem;
-  margin: 10px 10px 20px 10px;
-  padding: 1.5rem;
-  border-radius: 8px;
-}
 
-.content {
-	background-color: var(--mantle);
-	background-image: radial-gradient(circle, rgba(0, 0, 0, 0.12) 0.5px, transparent 0.5px);
-	background-size: 1.5rem 1.5rem;
-	padding: 1.5rem;
-	border-radius: 8px;
-}
-
-.content-column > :first-child {
+main :first-child {
 	margin-top: 0;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 100%;
+	min-width: 0;
+	min-height: 100vh;
+}
+
+
+
+.home-content {
+	background-color: var(--crust);
+	padding: 1.5rem;
+	margin: 1rem;
+	 background-image: radial-gradient(#b6aea5 15%, transparent 15%);
+  background-size: 15px 15px;
+  margin: 10px 10px 20px 10px;
+	border-radius: 8px;
 }
 
 #skip-link {
@@ -309,12 +298,11 @@ code {
 
 /* Header */
 header {
-	display: flex;
 	gap: 1rem;
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1rem;
+	padding: clamp(0.5rem, 2vw, 1rem);
 }
 
 
@@ -322,41 +310,24 @@ header {
 
 .title {
   color: var(--sidebar-text);
-  font-size: 3rem;
+  font-size: clamp(1.5rem, 5vw, 3rem);
   padding: 1rem;
+  word-break: break-word;
 }
 
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 8rem;
-  height: 8rem;
+  width: clamp(5rem, 15vw, 8rem);
+  height: clamp(5rem, 15vw, 8rem);
   margin: 0 auto 0.5rem;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.12);
   color: #e0def4;
-  font-size: 1.35rem;
+  font-size: clamp(1rem, 2vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.04em;
-}
-
-.mobile-menu-toggle {
-	display: none;
-	width: 100%;
-	padding: 0.75rem 1rem;
-	font-size: 0.95rem;
-	font-weight: 700;
-	color: #2a273f;
-	background: #e0def4;
-	border: none;
-	border-radius: 999px;
-	cursor: pointer;
-}
-
-.mobile-menu-toggle:focus {
-	outline: 2px solid #fff;
-	outline-offset: 3px;
 }
 
 .nav {
@@ -462,10 +433,15 @@ header {
   color: var(--nav-text);
 }
 
-@media (max-width: 724px) {
-	container {
-		flex-direction: column;
-		padding: 0 1rem 2rem;
+@media (min-width: 768px) {
+	.sidebar {
+		flex: 0 0 30%;
+		position: sticky;
+		padding: 2rem 1rem 2rem 1rem;
+	}
+
+	.main {
+		flex: 1 1 70%;
 	}
 }
 

@@ -46,6 +46,8 @@
 		"zod": "^4.4.3"
 	},
 	"dependencies": {
-		"@zachleat/heading-anchors": "^1.0.5"
+		"@zachleat/heading-anchors": "^1.0.5",
+		"eleventy-plugin-embed-everything": "^1.21.2",
+		"eleventy-plugin-poison": "^1.0.1"
 	}
 }
