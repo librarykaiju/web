@@ -61,7 +61,18 @@
 				<h2 class="visually-hidden">Top level navigation menu</h2>
 				<ul class="nav">
 				{%- for entry in collections.all | eleventyNavigation %}
-					<li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
+					{%- if entry.children.length %}
+					<details class="nav-accordion"{% if entry.url == page.url or page.url.startsWith(entry.url) %} open{% endif %}>
+						<summary class="nav-accordion-summary"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></summary>
+						<ul class="nav-submenu">
+						{%- for child in entry.children %}
+							<li class="nav-submenu-item{% if child.url == page.url %} nav-item-active{% endif %}"><a href="{{ child.url }}"{% if child.url == page.url %} aria-current="page"{% endif %}>{{ child.title }}</a></li>
+						{%- endfor %}
+						</ul>
+					</details>
+				{%- else %}
+					<li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
+				{%- endif %}
 				{%- endfor %}
 				</ul>
 			</nav>
