@@ -1,0 +1,62 @@
+/* Base Calendar Styling */
+.calendar-container {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 400px;
+  margin: 30px auto;
+  background: var(--crust);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.calendar-header {
+  background: var(--crust);
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--sapphire);
+}
+
+/* 7-Column Layout Grid */
+.weekdays,
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.weekdays {
+  background: var(--crust);
+  font-weight: 600;
+  color: var(--text);
+  padding: 10px 0;
+}
+
+.days-grid {
+  padding: 15px;
+  gap: 8px;
+  color: var(--text);
+}
+
+.days-grid div {
+  padding: 12px 0;
+  color: #1f2937;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.days-grid div:hover {
+  background-color: var(--rosewater);
+}
+
+/* === CRITICAL PART: Highlight Today's Current Day === */
+.days-grid div.current-day {
+  background-color: var(--sapphire);
+  color: var(--crust);
+  font-weight: bold;
+}

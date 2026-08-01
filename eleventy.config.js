@@ -26,6 +26,7 @@ export default async function(eleventyConfig) {
 			"./public/": "/"
 		})
 		.addPassthroughCopy("./content/feed/pretty-atom-feed.xsl");
+		
 
 	// Run Eleventy when these files change:
 	// https://www.11ty.dev/docs/watch-serve/#add-your-own-watch-targets
@@ -64,9 +65,7 @@ export default async function(eleventyConfig) {
 		type: "atom", // or "rss", "json"
 		outputPath: "/feed/feed.xml",
 		stylesheet: "pretty-atom-feed.xsl",
-		templateData: {
-			
-		},
+	
 		collection: {
 			name: "posts",
 			limit: 10,
@@ -125,9 +124,6 @@ export default async function(eleventyConfig) {
 	// eleventyConfig.setServerPassthroughCopyBehavior("passthrough");
 };
 
-
-
-
 export const config = {
 	// Control which files Eleventy will process
 	// e.g.: *.md, *.njk, *.html, *.liquid
@@ -151,9 +147,7 @@ export const config = {
 		includes: "../_includes",  // default: "_includes" (`input` relative)
 		data: "../_data",          // default: "_data" (`input` relative)
 		output: "_site"
-	}
-	
-	,
+	},
 
 	// -----------------------------------------------------------------
 	// Optional items:

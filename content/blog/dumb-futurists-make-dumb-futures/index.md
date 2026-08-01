@@ -6,10 +6,8 @@ tags:
   - "commentary"
   - "machine-learning"
   - "science-fiction"
-coverImage: "dylan-hunter-tGeTTJPjyMw-unsplash-scaled.jpg"
+coverImage: "./dylan-hunter-tGeTTJPjyMw-unsplash-scaled.jpg"
 ---
-
-<img src="./dylan-hunter-tGeTTJPjyMw-unsplash-scaled.jpg">
 
 Over on **Wired** I read an excerpt of Michael Pollan's new book, _A World Appears_.[1](#c762dc4b-46c8-4e95-9bb7-337fc8a63e1a) It's a great distillation of the argument of why AI will never be conscious and how the already "BIG" concept of consciousness has become even messier when you throw machine learning[2](#dd72e6ea-e190-4995-ae38-6bdc1c5f1888) into the mix.
 
@@ -22,15 +20,3 @@ Oh, boy. So, the solution to the thought exercise of a what to do about a machin
 And I know...I _know_ many people don't see it this way. They don't want to see it this way. We have all dreamed about that shiny future presented to us in our favorite science fiction stories, and to reconcile that dream with our current course of action pretty much shits in the buffet. But the real point of the "Robot Uprising" trope in sci-fi lit isn't to scare us away from trying, but to warn us to take responsibility for the pursuit. In the best stories, the conflict doesn't come because of the alien nature of the machines.[5](#4e594396-d350-49be-9da8-376b58545920) The conflict comes because we refuse to recognize the autonomy and "personhood" of the those who are not like us, but who are the culmination -- directly or indirectly -- of our actions. There is a societal ignorance to our own ingenuity that is almost charming in a self-deprecating way. We build these tools to make our lives easier and accidentally achieve a miracle.
 
 The stories grant us the grace to not understand our own potential, while hoping that we will have the poise to take responsibility for it. The reality watches as we gleefully strive for that potential so we can package and sell it as a product that works as advertised.[6](#f69ff8e9-f852-4b05-b96b-c669def9a746)
-
-## Footnotes & Asides
-
-## Further Reading:
-
-[![](images/91IHbrVsM4L._SL1500_.jpg)](https://bookshop.org/p/books/a-psalm-for-the-wild-built-a-monk-and-robot-book-becky-chambers/daf659b1800c0c93?ean=9781250236227&digital=t)
-
-A book that proposes the only correct response to, "Oh, shit -- we made robots alive!"
-
-A song about failed revolution.
-
-https://www.youtube.com/watch?v=6JC6V\_ys1bg

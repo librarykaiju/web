@@ -30,6 +30,7 @@
 		{#- Add the contents of a file to the bundle #}
 		<style>{% include "css/index.css" %}</style>
 		<style>{% include "css/sticky-note.css" %}</style>
+		<style>{% include "css/journal.css" %}</style>
 
 		{#- Or you can add from node_modules #}
 		{# <style>{% include "node_modules/something.css" %}</style> #}
@@ -88,10 +89,11 @@
 
 	<div class="main">
 	<div class="page">
+        <div class="content">
 
-		<heading-anchors>
 			{{ content | safe }}
-		</heading-anchors>
+
+	</div>
 	</div>
 	</div>
 

@@ -8,7 +8,7 @@ tags:
   - "library-life"
   - "passwords"
   - "technology"
-coverImage: "czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg1NDU5OTQtaW1hZ2Uta3d2dmR5N3cuanBn.webp"
+coverImage: "/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg1NDU5OTQtaW1hZ2Uta3d2dmR5N3cuanBn.webp"
 ---
 
 {% include "partials/_that-happened.njk" %}
