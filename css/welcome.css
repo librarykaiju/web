@@ -28,10 +28,13 @@
   min-height: 250px;
   background: rgba(255, 255, 255, 0.12);
   background-image: var(--bio);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* Tablet and Desktop */
-@media (min-width: 768px) {
+@media (min-width: 724px) {
   .home {
     flex-direction: row;
     align-items: flex-start;

@@ -1,11 +1,16 @@
 ---
-layout: layouts/base.njk
+layout: layouts/base2.njk
 permalink: /logs/books/
 eleventyNavigation:
   key: 04.01 Books
   parent: 04 Logs
 ---
+
+<style>{% include "css/journal.css" %}</style>
+
+<div class="content">
 <h1>My Library</h1>
 
 {% set postslist = collections.books %}
 {% include "postslist.njk" %}
+</div>

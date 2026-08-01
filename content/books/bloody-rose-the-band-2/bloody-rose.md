@@ -1,13 +1,15 @@
 ---
 title: "Bloody Rose (The Band, 2)"
+author:
+series: 
+shelf: finished
+
 date: 2026-02-11
 tags: books
-genre: Fantasy
-subjects: [books] 
+genre: fantasy
+subjects: 
 coverImage: "91UaqvQkJUL._SY425_.jpg"
 ---
-
-Series:
 
 * * *
 

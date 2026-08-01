@@ -1,6 +1,11 @@
 ---
 layout: layouts/base2.njk
 ---
+<style>{% include "css/index.css" %}</style>
+
+        <div class="main">
+		<div class="home-content">
+
 {# Only include the syntax highlighter CSS on blog posts, included with the CSS per-page bundle #}
 <style>{% include "node_modules/prismjs/themes/prism-okaidia.css" %}</style>
 <style>{% include "css/prism-diff.css" %}</style>
@@ -34,9 +39,7 @@ layout: layouts/base2.njk
 	</div>
 </div>
 
-<div class="post-content">
 	{{ content | safe }}
-</div>
 
 {%- if collections.books %}
 {%- set previousPost = collections.books | getPreviousCollectionItem %}
@@ -48,3 +51,5 @@ layout: layouts/base2.njk
 </ul>
 {%- endif %}
 {%- endif %}
+</div>
+</div>

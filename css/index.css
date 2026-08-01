@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Frijole&family=Lacquer&family=Special+Elite&display=swap');
+/* This is an arbitrary CSS string added to the bundle */
 /* Defaults */
 :root {
 	--font-family: -apple-system, system-ui, sans-serif;
@@ -67,19 +69,19 @@
 
 /* Headings */
 h1 {
-  font-family: frijole;
+  font-family: special elite;
   color: var(--red);
 }
 h2 {
-  font-family: frijole;
+  font-family: special elite;
   color: var(--yellow);
 }
 h3 {
-  font-family: frijole;
+  font-family: special elite;
   color: var(--teal);
 }
 h4 {
-  font-family: frijole;
+  font-family: special elite;
   color: var(--sky);
 }
 
@@ -155,12 +157,16 @@ iframe {
 	aspect-ratio: 16/9;
 }
 
-p:last-child {
-	margin-bottom: 1.5;
-}
+
 p {
-	line-height: 1.5;
+	margin-bottom: 1.5rem;
+	display:block;
 }
+
+p:last-child {
+	margin-bottom: 0;
+}
+
 
 li {
 	line-height: 1.5;
@@ -339,10 +345,7 @@ header {
   margin: 0 0 1rem;
 }
 
-/* 
-  FIX: Changed from ".nav > li" to ".nav > *" 
-  This counts both <li> and <details> elements in the loop 
-*/
+
 .nav > *:nth-child(6n+1) { --nav-color: #eb6f92; }
 .nav > *:nth-child(6n+2) { --nav-color: #f6c177; }
 .nav > *:nth-child(6n+3) { --nav-color: #ea9a97; }
@@ -403,6 +406,14 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+}
+
+.nav-accordion-summary {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  user-select: none; /* Prevents text highlighting on rapid clicks */
 }
 
 .nav-accordion > summary::-webkit-details-marker {
@@ -422,10 +433,12 @@ header {
   transform: rotate(90deg);
 }
 
-.nav-accordion-summary a {
+.nav-accordion-summary a, 
+.nav-accordion-summary span {
   display: inline-block;
   flex-grow: 1;
   color: var(--nav-text);
+  pointer-events:none;
 }
 
 .nav-accordion-summary a[href]:not(:hover) {
@@ -464,7 +477,7 @@ header {
 }
 
 
-@media (min-width: 768px) {
+@media (min-width: 724px) {
 	.sidebar {
 		flex: 0 0 30%;
 		position: sticky;
@@ -473,75 +486,6 @@ header {
 
 	.main {
 		flex: 1 1 70%;
-	}
-}
-
-
-
-/* Log layout */
-.post-media-header {
-	display: flex;
-	gap: 1.5rem;
-	align-items: flex-start;
-	margin-bottom: 2rem;
-	padding: 1.25rem;
-	border: 1px solid var(--color-gray-20);
-	border-radius: 0.75rem;
-	background: rgba(224, 224, 224, 0.18);
-}
-
-.post-media-image {
-	flex: 0 0 280px;
-}
-
-.post-media-image img {
-	display: block;
-	width: 100%;
-	height: auto;
-	border-radius: 0.5rem;
-}
-
-.post-media-meta {
-	flex: 1 1 0;
-}
-
-.post-media-meta h1 {
-	margin-top: 0;
-	margin-bottom: 0.75rem;
-}
-
-.post-metadata {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem 1rem;
-	padding: 0;
-	margin: 0 0 0.75rem;
-	list-style: none;
-}
-
-.post-category,
-.post-tag {
-	font-weight: 600;
-}
-
-.post-description {
-	margin: 0;
-	line-height: 1.6;
-	color: var(--color-gray-90);
-}
-
-.post-content {
-	margin-top: 1.5rem;
-}
-
-@media (max-width: 724px) {
-	.post-media-header {
-		flex-direction: column;
-	}
-
-	.post-media-image {
-		flex-basis: auto;
-		width: 100%;
 	}
 }
 

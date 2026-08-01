@@ -1,4 +1,5 @@
 ---
+layout: layouts/log.njk
 title: "A Winter's Promise (The Mirror Visitor Quartet Book 1)"
 date: 2026-02-11
 tags: books
