@@ -47,43 +47,7 @@
 
 
 <div class="container">
-	<div class="sidebar">
-    	<div class="header">
-    		<div class="logo" aria-hidden="true">
-        		<span class="logo-mark">BJ</span> </div>
-        			<div class="title">Thoughts & Scribbles</div>
-
-      	</div>
-
-			{#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
-			<nav>
-				<h2 class="visually-hidden">Top level navigation menu</h2>
-				<ul class="nav">
-				{%- for entry in collections.all | eleventyNavigation %}
-				{%- if entry.children.length %}
-					<details class="nav-accordion"{% if entry.url == page.url or page.url.startsWith(entry.url) %} open{% endif %}>
-						<summary class="nav-accordion-summary">04 Media Logs</summary>
-						<ul class="nav-submenu">
-						{%- for child in entry.children %}
-							<li class="nav-submenu-item{% if child.url == page.url %} nav-item-active{% endif %}"><a href="{{ child.url }}"{% if child.url == page.url %} aria-current="page"{% endif %}>{{ child.title }}</a></li>
-						{%- endfor %}
-						</ul>
-					</details>
-				{%- else %}
-					<li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
-				{%- endif %}
-				{%- endfor %}
-				</ul>
-			</nav>
-			<div class="footer">
-        <p>
-          <em> Hand-coded somewhere in the vastness with stubborn tenacity &amp; built with <a href="https://www.11ty.dev/">{{ eleventy.generator }}</a>. </em>
-        </p>
-        <p class="site-copyright">
-          © <span id="current-year"></span> Brandon Johnston.
-        </p>
-      </div>
-</div>
+	{% include "partials/_sidebar.njk" %}
 
 	<div class="main">
 		<heading-anchors>

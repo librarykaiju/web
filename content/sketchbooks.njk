@@ -4,13 +4,80 @@ eleventyNavigation:
   key: "03 Sketchbooks"
   order: 4
 ---
+<style>
+  .sketch-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+  }
+
+  .sketch-gallery-item {
+    margin: 0;
+  }
+
+  .sketch-gallery-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .sketch-gallery-thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--mantle);
+  }
+
+  .sketch-gallery-title {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  .sketch-gallery-date {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.78rem;
+    color: var(--overlay2);
+  }
+</style>
+
 <h1>Sketchbook Pages</h1>
 
-{% set postslist = collections.sketchbooks %}
-{% include "postslist.njk" %}
+<ul class="sketch-gallery">
+{%- for post in collections.sketchbooks | reverse %}
+  {%- set rawCover = post.data.coverImage %}
+  {%- if rawCover %}
+    {%- if rawCover.startsWith("/") or rawCover.startsWith("http://") or rawCover.startsWith("https://") %}
+      {%- set coverSrc = rawCover %}
+    {%- elif rawCover.startsWith("./") %}
+      {%- set coverSrc = post.url ~ (rawCover | replace("./", "")) %}
+    {%- else %}
+      {%- set coverSrc = post.url ~ rawCover %}
+    {%- endif %}
+    <li class="sketch-gallery-item">
+      <a class="sketch-gallery-link" href="{{ post.url }}">
+        <img
+          class="sketch-gallery-thumb"
+          src="{{ coverSrc }}"
+          alt="{{ post.data.title or 'Sketchbook entry' }}"
+          loading="lazy"
+          decoding="async"
+        >
+        <p class="sketch-gallery-title">
+          {{ post.data.title or post.url }}
+          <time class="sketch-gallery-date" datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLLL yyyy") }}</time>
+        </p>
+      </a>
+    </li>
+  {%- endif %}
+{%- endfor %}
+</ul>
 
-<div class="gallery">
-  {% for post in collections.sketchbooks | reverse %}
-  <a href="{{ post.url }}"><img src="/img/sketches/{{ post.data.coverImage }}" loading="lazy" /></a> {{ post.data.dateString }}
-  {% endfor %}
-</div>
+
