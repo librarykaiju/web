@@ -1,13 +1,11 @@
 ---
 title: "I was a soccer dad this weekend"
 date: 2026-02-22
-categories: 
-  - "thoughts"
 tags: 
   - "parenting"
   - "soccer"
   - "sports"
-coverImage: "michael-wright-ie7a7O4Jeyk-unsplash2.jpg"
+coverImage: "/michael-wright-ie7a7O4Jeyk-unsplash2.jpg"
 ---
 
 As a librarian, reference interactions frequently call on me to be an expert on things I might have no knowledge of. It can happen on the spot, and when it does it's a balancing act between managing expectations and doing my best to provide good information. Because of this experience, I've developed a mantra that I use with my library community, whenever I am asked something I don't know:

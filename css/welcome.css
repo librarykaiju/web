@@ -24,10 +24,12 @@
 
 .bio {
   flex-direction: column;
-  min-width: 250px;
-  min-height: 250px;
+  min-width: 400px;
+  min-height: 400px;
   background: rgba(255, 255, 255, 0.12);
   background-image: var(--bio);
+  object-fit:cover;
+  object-position: center;
 }
 
 /* Tablet and Desktop */

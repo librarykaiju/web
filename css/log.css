@@ -1,0 +1,80 @@
+p{
+	line-height: 2;
+}/* Log layout */
+.log-header {
+	display: flex;
+	gap: 1.5rem;
+	align-items: flex-start;
+	padding: 1rem;
+	margin-bottom: 2rem;
+	border-radius:2px;
+	background: conic-gradient(from -15deg at 60% 20%, 
+      #0000 105deg, var(--mantle) 0%);
+	
+}
+.summary {
+	background-color: color-mix(in srgb, var(--overlay1) 50%, transparent);
+	border-radius: 8px;
+	padding: 1rem;
+	font-family: "Special Elite"
+}
+
+
+.log-image {
+	flex: 0 0 280px;
+}
+
+.log-image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 0.5rem;
+}
+
+.log-meta {
+	flex: 1 1 0;
+	
+}
+
+.log-meta h1 {
+	font-family: "Special Elite";
+	margin-top: 0;
+	margin-bottom: 0.25rem;
+}
+
+.log-metadata {
+	display: inline-block;
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+	padding: 0;
+	margin: 0 0 0.75rem;
+	list-style: none;
+	font-family: "Special Elite";
+	line-height: 2;
+}
+
+
+.post-category,
+.post-tag {
+	font-weight: 600;
+}
+
+.log-description {
+	margin: 0;
+	line-height: 1.6;
+	color: var(--color-gray-90);
+}
+
+.log-content {
+	margin-top: 1.5rem;
+}
+
+@media (max-width: 724px) {
+	.log-header {
+		flex-direction: column;
+	}
+	.log-image {
+		flex-basis: auto;
+		width: 100%;
+	}
+}

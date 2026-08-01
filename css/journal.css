@@ -2,7 +2,6 @@
 .page {
   display: flex;
   background-color: var(--sidebar-bg)!important;
-  margin: 1rem;
  
 }
 
@@ -18,7 +17,7 @@
   line-height: 1.7;
   font-family: lacquer;
   font-weight: regular;
-  padding: 2rem;
+  padding: 1rem;
   color: var(--color-content-text);
  
 }
@@ -32,7 +31,7 @@
   border-radius: 0 8px 8px 0;
   flex: 1;
   font-family: lacquer;
-  padding: 2rem;
+  padding: 1rem;
   color: var(--color-sidebar-text);
   box-shadow: inset 15px 0 10px -5px rgba(0, 0, 0, 0.4),
     0 0 10px rgba(0, 0, 0, 0.1);
@@ -41,12 +40,10 @@
   font-size: x-large;
   color: var(--text);
 }
-@media (max-width: 768px) {
-  .page {
-    flex-direction: column;
-  }
-  .content {
-    margin-bottom: 1rem;
-  }
+
+p {
+  margin-bottom: 1.5;
+  display: block;
+
 }
 

@@ -7,7 +7,7 @@ tags:
   - "book-binding"
   - "crafting"
   - "leather-working"
-coverImage: "img_0613.jpg"
+coverImage: "/images/img_0613.jpg"
 ---
 
 I've been experimenting with leather working and book binding. While I like using technology, I often find myself code-switching between pen and paper and blinking cursors on a screen. Maybe it's a Xennial mindset that comes from a prefrontal cortex that developed in both pre/post internet worlds, but I love a good notebook as much as I love my laptop.
