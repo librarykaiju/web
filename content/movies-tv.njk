@@ -1,0 +1,17 @@
+---
+layout: layouts/base2.njk
+permalink: /movies-tv/
+eleventyNavigation:
+  key: 04.03 Movies & TV
+  order: 4.03
+  parent: 04 Logs
+---
+<header class="movies-tv-hero">
+	<div class="books-hero__content">
+		<p class="books-hero__eyebrow">Media Logs</p>
+		<h1>Movies & TV</h1>
+	</div>
+</header>
+
+{% set postslist = collections.media %}
+{% include "postslist.njk" %}

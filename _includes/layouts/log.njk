@@ -15,16 +15,18 @@ layout: layouts/base2.njk
 			{% if coverImage %}
 			<div class="log-image">
 				<img src="{{ coverImage }}" alt="{{ title }} cover image">
-				{% if shelf %}
-				{% set shelfValue = shelf | lower %}
-				<div class="shelf-badge{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %} shelf-badge--finished{% elseif shelfValue == 'reading' or shelfValue == 'currently-reading' or shelfValue == 'currently reading' %} shelf-badge--reading{% elseif shelfValue == 'tbr' or shelfValue == 'to-be-read' or shelfValue == 'to be read' %} shelf-badge--tbr{% elseif shelfValue == 'dnf' or shelfValue == 'did-not-finish' or shelfValue == 'did not finish' %} shelf-badge--dnf{% endif %}">{{ shelf }}</div>
-				{% endif %}
 			</div>
 			{% endif %}
 		</div>
 
 		<div class="log-details-column">
-		<h1>{{ title }}</h1>
+		<div class="log-title-row">
+			<h1>{{ title }}</h1>
+			{% if shelf %}
+			{% set shelfValue = shelf | lower %}
+			<div class="shelf-badge{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %} shelf-badge--finished{% elseif shelfValue == 'reading' or shelfValue == 'currently-reading' or shelfValue == 'currently reading' %} shelf-badge--reading{% elseif shelfValue == 'tbr' or shelfValue == 'to-be-read' or shelfValue == 'to be read' %} shelf-badge--tbr{% elseif shelfValue == 'dnf' or shelfValue == 'did-not-finish' or shelfValue == 'did not finish' %} shelf-badge--dnf{% endif %}">{{ shelf }}</div>
+			{% endif %}
+		</div>
 		<ul class="log-metadata" style="list-style-type: none; padding: 0; margin: 0;">
 			{% if author %}
 			<li><strong>Author:</strong> {{ author }}</li>
@@ -44,6 +46,14 @@ layout: layouts/base2.njk
 
 			{% if genre %}
 			<li><strong>Genre:</strong> {{ genre }}</li>
+			{% endif %}
+
+			{% if publisher %}
+			<li><strong>Publisher:</strong> {{ publisher }}</li>
+			{% endif %}
+
+			{% if externalUrl %}
+			<li><strong>URL:</strong> <a href="{{ externalUrl }}" target="_blank" rel="noopener noreferrer" class="external-link"><span>{{ externalUrl }}</span><span class="external-link-icon" aria-hidden="true">↗</span></a></li>
 			{% endif %}
 
 			{% if subject %}
