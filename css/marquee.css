@@ -45,3 +45,9 @@
   font-size: 1 rem;
   white-space: nowrap;
 }
+
+@media (max-width: 723px) {
+  .marquee {
+    display: none;
+  }
+}

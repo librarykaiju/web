@@ -70,10 +70,7 @@ eleventyNavigation:
           loading="lazy"
           decoding="async"
         >
-        <p class="sketch-gallery-title">
-          {{ post.data.title or post.url }}
-          <time class="sketch-gallery-date" datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLLL yyyy") }}</time>
-        </p>
+        
       </a>
     </li>
   {%- endif %}

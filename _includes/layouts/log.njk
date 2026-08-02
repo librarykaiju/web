@@ -3,8 +3,6 @@ layout: layouts/base2.njk
 ---
 <style>{% include "css/index.css" %}</style>
 
-        <div class="main">
-		<div class="home-content">
 
 {# Only include the syntax highlighter CSS on blog posts, included with the CSS per-page bundle #}
 <style>{% include "node_modules/prismjs/themes/prism-okaidia.css" %}</style>
@@ -12,114 +10,121 @@ layout: layouts/base2.njk
 <style>{% include "css/log.css" %}</style>
 
 <div class="log-header">
-	{% if coverImage %}
-	<div class="log-image">
-		<img src="{{ coverImage }}" alt="{{ title }} cover image">
-	</div>
-	{% endif %}
-
 	<div class="log-meta">
+		<div class="log-meta-column">
+			{% if coverImage %}
+			<div class="log-image">
+				<img src="{{ coverImage }}" alt="{{ title }} cover image">
+				{% if shelf %}
+				{% set shelfValue = shelf | lower %}
+				<div class="shelf-badge{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %} shelf-badge--finished{% elseif shelfValue == 'reading' or shelfValue == 'currently-reading' or shelfValue == 'currently reading' %} shelf-badge--reading{% elseif shelfValue == 'tbr' or shelfValue == 'to-be-read' or shelfValue == 'to be read' %} shelf-badge--tbr{% elseif shelfValue == 'dnf' or shelfValue == 'did-not-finish' or shelfValue == 'did not finish' %} shelf-badge--dnf{% endif %}">{{ shelf }}</div>
+				{% endif %}
+			</div>
+			{% endif %}
+		</div>
+
+		<div class="log-details-column">
 		<h1>{{ title }}</h1>
-		<ul style="list-style-type: none; padding: 0; margin: 0;">
-		
-		<ul class="log-metadata">
-		{% if title %} 
-<p>{{ Title }}</p> 
-{% endif %}
+		<ul class="log-metadata" style="list-style-type: none; padding: 0; margin: 0;">
+			{% if author %}
+			<li><strong>Author:</strong> {{ author }}</li>
+			{% endif %}
 
-{% if author %} 
-<p> Author: {{ author }}</p> 
-{% endif %}
+			{% if series %}
+			<li><strong>Series:</strong> {{ series }}</li>
+			{% endif %}
 
-{% if series %} 
-<p>Series: {{ series }}</p> 
-{% endif %}
+			{% if format %}
+			<li><strong>Format:</strong> {{ format }}</li>
+			{% endif %}
 
-{% if format %} 
-<p>Format: {{ format }}</p> 
-{% endif %}
+			{% if classification %}
+			<li><strong>Classification:</strong> {{ classification }}</li>
+			{% endif %}
 
-{% if classification %} 
-<p>Classification: {{ classification }}</p> 
-{% endif %}
+			{% if genre %}
+			<li><strong>Genre:</strong> {{ genre }}</li>
+			{% endif %}
 
-{% if genre %} 
-<p>Genre: {{ genre }}</p>
-{% endif %}
-
-
-{% if subject %} 
-<p>Subjects: {{ subject }}</p>
-{% endif %}
-
-{% if vibes %} 
-<p>Vibes: {{ vibes }}</p>
-{% endif %}
-
-{% if shelf %} 
-<p>Shelf: {{ shelf }}</p> 
-{% endif %}
-
-{% if completed %} 
-<p>Completed in: {{ completed }}</p> 
-{% endif %}
-
-{% if rating %} 
-<p>Rating: {{ rating }}</p> 
-{% endif %}
-
-{% if studio %} 
-<p>Studio: {{ studio }}</p> 
-{% endif %}
-
-{% if platform %} 
-<p>Platform: {{ platform }}</p> 
-{% endif %}
-
-{% if performers %} 
-<p>Performers: {{ performers }}</p> 
-{% endif %}
-
-{% if director %} 
-<p>Director: {{ director }}</p> 
-{% endif %}
-
-{% if medium %} 
-<p>Medium: {{ medium }}</p> 
-{% endif %}
-
-{% if artist %} 
-<p>Artist: {{ artist }}</p> 
-{% endif %}
-
-			<li class="post-tags">
-				{%- for tag in tags | filterTagList %}
-				{%- set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
-				<a href="{{ tagUrl }}" class="post-tag">{{ tag }}</a>
-				{%- endfor %}
+			{% if subject %}
+			<li>
+				<span class="subject-label"><strong>Subjects:</strong></span>
+				{% set subjectValues = subject.split(',') %}
+				{% for subjectValue in subjectValues %}
+				<span class="subject-item">{{ subjectValue | trim }}</span>
+				{% endfor %}
 			</li>
+			{% endif %}
+
+			{% if subjects %}
+			<li>
+				<span class="subject-label"><strong>Subjects:</strong></span>
+				{% set subjectValues = subjects.split(',') %}
+				{% for subjectValue in subjectValues %}
+				<span class="subject-item">{{ subjectValue | trim }}</span>
+				{% endfor %}
+			</li>
+			{% endif %}
+
+			{% if vibes %}
+			<li>
+				<span class="subject-label"><strong>Vibes:</strong></span>
+				{% set vibeValues = vibes.split(',') %}
+				{% for vibeValue in vibeValues %}
+				<span class="vibe-item">{{ vibeValue | trim }}</span>
+				{% endfor %}
+			</li>
+			{% endif %}
+
+			{% if completed %}
+			<li><strong>Completed in:</strong> {{ completed }}</li>
+			{% endif %}
+
+			{% if rating %}
+			<li><strong>Rating:</strong> {{ rating }}</li>
+			{% endif %}
+
+			{% if studio %}
+			<li><strong>Studio:</strong> {{ studio }}</li>
+			{% endif %}
+
+			{% if platform %}
+			<li><strong>Platform:</strong> {{ platform }}</li>
+			{% endif %}
+
+			{% if performers %}
+			<li><strong>Performers:</strong> {{ performers }}</li>
+			{% endif %}
+
+			{% if director %}
+			<li><strong>Director:</strong> {{ director }}</li>
+			{% endif %}
+
+			{% if medium %}
+			<li><strong>Medium:</strong> {{ medium }}</li>
+			{% endif %}
+
+			{% if artist %}
+			<li><strong>Artist:</strong> {{ artist }}</li>
+			{% endif %}
+
 		</ul>
 
 		{% if description %}
 		<p class="post-description">{{ description }}</p>
 		{% endif %}
-	</div>
-</div>
-<<<<<<< HEAD
 
-	{{ content | safe }}
-=======
-<h2> Summary & Notes </h2>
-<div class="summary">
-	{% if summary %} 
-<p>{{ summary }}</p> 
-{% endif %}
+		{% if summary %}
+		<div class="summary">
+			<p><strong>Summary:</strong> {{ summary }}</p>
+		</div>
+		{% endif %}
+		</div>
+	</div>
 </div>
 <div class="post-content">
 	{{ content | safe }}
-
 </div>
->>>>>>> c2139b280a00204f9c46903e7c289a0fc5092a3c
 
 {%- if collections.books %}
 {%- set previousPost = collections.books | getPreviousCollectionItem %}
@@ -131,5 +136,3 @@ layout: layouts/base2.njk
 </ul>
 {%- endif %}
 {%- endif %}
-</div>
-</div>

@@ -2,6 +2,10 @@
 .container {
 	display: flex;
 	flex-wrap: wrap;
+	flex: 1 1 auto;
+	width: 100%;
+	align-items: stretch;
+	min-height: 100vh;
 }
 
 .sidebar {
@@ -30,18 +34,23 @@
 
 /* Header */
 .sidebar .header {
-	gap: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	padding: clamp(0.5rem, 2vw, 1rem);
+	text-align: center;
 }
 
 .title {
 	color: var(--sidebar-text);
-	font-size: clamp(1.5rem, 5vw, 3rem);
-	padding: 1rem;
+	font-size: clamp(1.15rem, 2.2vw, 2rem);
+	line-height: 1.2;
+	padding: 0;
 	word-break: break-word;
+	max-width: 100%;
 }
 
 .logo {
@@ -209,10 +218,18 @@
 		flex: 0 0 30%;
 		position: sticky;
 		padding: 2rem 1rem 2rem 1rem;
+		min-height: 100vh;
 	}
 
 	.main {
 		flex: 1 1 70%;
+		min-height: 100%;
+	}
+}
+
+@media (max-width: 723px) {
+	.footer {
+		display: none;
 	}
 }
 </style>
@@ -245,6 +262,7 @@
 		{%- endfor %}
 		</ul>
 	</nav>
+	{% include "partials/_calendar.njk" %}
 	<div class="footer">
 		<p>
 			<em> Hand-coded somewhere in the vastness with stubborn tenacity &amp; built with <a href="https://www.11ty.dev/">{{ eleventy.generator }}</a>. </em>

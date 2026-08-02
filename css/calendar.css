@@ -1,23 +1,32 @@
 /* Base Calendar Styling */
 .calendar-container {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 400px;
-  margin: 30px auto;
+  width: 100%;
+  max-width: min(100%, 20rem);
+  margin: 1rem auto 0;
   background: var(--crust);
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 723px) {
+  .calendar-container {
+    display: none;
+  }
 }
 
 .calendar-header {
   background: var(--crust);
   color: #ffffff;
-  padding: 20px;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
   text-align: center;
 }
 
 .calendar-header h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  line-height: 1.2;
   color: var(--sapphire);
 }
 
@@ -33,17 +42,19 @@
   background: var(--crust);
   font-weight: 600;
   color: var(--text);
-  padding: 10px 0;
+  padding: 0.5rem 0;
+  font-size: clamp(0.72rem, 1.1vw, 0.9rem);
 }
 
 .days-grid {
-  padding: 15px;
-  gap: 8px;
+  padding: clamp(0.5rem, 1.3vw, 0.95rem);
+  gap: clamp(0.2rem, 0.6vw, 0.5rem);
   color: var(--text);
 }
 
 .days-grid div {
-  padding: 12px 0;
+  padding: clamp(0.35rem, 1.1vw, 0.75rem) 0;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
   color: #1f2937;
   border-radius: 8px;
   cursor: pointer;

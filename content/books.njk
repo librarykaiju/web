@@ -23,5 +23,105 @@ Think of these as a more descriptive form of subject headings that are intended 
 <hr>
 
 {% set postslist = collections.books %}
-{% include "postslist.njk" %}
+
+<div class="books-filters">
+	<label>
+		<span>Genre</span>
+		<select id="genre-filter">
+			<option value="all">All genres</option>
+		</select>
+	</label>
+	<label>
+		<span>Finished year</span>
+		<select id="year-filter">
+			<option value="all">All years</option>
+		</select>
+	</label>
+</div>
+
+<div class="books-grid" id="books-grid">
+	{%- for post in postslist | reverse %}
+		{% set shelfValue = post.data.shelf | default('') | lower %}
+		{% set shelfClass = '' %}
+		{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %}
+			{% set shelfClass = 'shelf-badge--finished' %}
+		{% elseif shelfValue == 'reading' or shelfValue == 'currently-reading' or shelfValue == 'currently reading' %}
+			{% set shelfClass = 'shelf-badge--reading' %}
+		{% elseif shelfValue == 'tbr' or shelfValue == 'to-be-read' or shelfValue == 'to be read' %}
+			{% set shelfClass = 'shelf-badge--tbr' %}
+		{% elseif shelfValue == 'dnf' or shelfValue == 'did-not-finish' or shelfValue == 'did not finish' %}
+			{% set shelfClass = 'shelf-badge--dnf' %}
+		{% endif %}
+		{% set coverImageSource = post.data.coverImage | default('') %}
+		{% set coverImagePath = '' %}
+		{% if coverImageSource %}
+			{% if coverImageSource[0] == '/' %}
+				{% set coverImagePath = coverImageSource %}
+			{% elif coverImageSource[0] == '.' %}
+				{% set coverImagePath = post.url ~ coverImageSource | replace('./', '') %}
+			{% else %}
+				{% set coverImagePath = post.url ~ 'images/' ~ coverImageSource %}
+			{% endif %}
+		{% endif %}
+		<article class="book-card" data-genre="{{ post.data.genre | default('uncategorized') | lower }}" data-year="{{ post.data.completed | default('') }}">
+			<a href="{{ post.url }}" class="book-card-link" aria-label="Open {{ post.data.title }}">
+				{% if coverImagePath %}
+				<div class="book-card-image">
+					<img src="{{ coverImagePath }}" alt="{{ post.data.title }} cover">
+					{% if post.data.shelf %}
+					<span class="shelf-badge {{ shelfClass }}">{{ post.data.shelf }}</span>
+					{% endif %}
+				</div>
+				{% endif %}
+			</a>
+		</article>
+	{%- endfor %}
+</div>
+
+<script>
+	(function () {
+		const cards = Array.from(document.querySelectorAll('.book-card'));
+		const genreFilter = document.getElementById('genre-filter');
+		const yearFilter = document.getElementById('year-filter');
+
+		if (!genreFilter || !yearFilter || !cards.length) return;
+
+		const genres = new Set();
+		const years = new Set();
+		cards.forEach((card) => {
+			const genre = card.dataset.genre || 'uncategorized';
+			const year = card.dataset.year || 'unknown';
+			genres.add(genre);
+			years.add(year);
+		});
+
+		[...genres].sort().forEach((genre) => {
+			const option = document.createElement('option');
+			option.value = genre;
+			option.textContent = genre.charAt(0).toUpperCase() + genre.slice(1);
+			genreFilter.appendChild(option);
+		});
+
+		[...years].filter(Boolean).sort((a, b) => Number(b) - Number(a)).forEach((year) => {
+			const option = document.createElement('option');
+			option.value = year;
+			option.textContent = year;
+			yearFilter.appendChild(option);
+		});
+
+		const applyFilters = () => {
+			const selectedGenre = genreFilter.value;
+			const selectedYear = yearFilter.value;
+
+			cards.forEach((card) => {
+				const matchesGenre = selectedGenre === 'all' || card.dataset.genre === selectedGenre;
+				const matchesYear = selectedYear === 'all' || card.dataset.year === selectedYear;
+				card.style.display = matchesGenre && matchesYear ? '' : 'none';
+			});
+		};
+
+		genreFilter.addEventListener('change', applyFilters);
+		yearFilter.addEventListener('change', applyFilters);
+	})();
+</script>
 </div>
