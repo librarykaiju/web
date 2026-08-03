@@ -1,11 +1,45 @@
 ---
-layout: layouts/base.njk
+layout: layouts/base2.njk
 eleventyNavigation:
   key: 04.04 Music
   order: 4.04
   parent: 04 Logs
 ---
-<h1>Playlist</h1>
+<header class="music-hero">
+  <div class="books-hero__content">
+    <p class="books-hero__eyebrow">Media Logs</p>
+    <h1>Music</h1>
+  </div>
+</header>
 
 {% set postslist = collections.music %}
-{% include "postslist.njk" %}
+
+<div class="books-grid music-grid" id="music-grid">
+  {%- for post in postslist | reverse %}
+    {% set thumbnailSource = post.data.coverImage | default('') %}
+    {% set thumbnailPath = '' %}
+    {% if thumbnailSource %}
+      {% if thumbnailSource.startsWith('/') or thumbnailSource.startsWith('http://') or thumbnailSource.startsWith('https://') %}
+        {% set thumbnailPath = thumbnailSource %}
+      {% elif thumbnailSource.startsWith('./') %}
+        {% set thumbnailPath = post.url ~ (thumbnailSource | replace('./', '')) %}
+      {% else %}
+        {% set thumbnailPath = post.url ~ thumbnailSource %}
+      {% endif %}
+    {% endif %}
+
+    {% if thumbnailPath %}
+    <article class="book-card record-card">
+      <a href="{{ post.url }}" class="book-card-link record-card-link" aria-label="Open {{ post.data.title }}">
+        <div class="book-card-image record-sleeve">
+          <img src="{{ thumbnailPath }}" alt="{{ post.data.title }} cover art">
+        </div>
+      </a>
+    </article>
+    {% endif %}
+  {%- endfor %}
+</div>
+
+{% if not postslist or postslist.length == 0 %}
+<p class="record-card-empty">No music entries yet.</p>
+{% endif %}

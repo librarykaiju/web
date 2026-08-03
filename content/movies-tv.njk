@@ -14,4 +14,29 @@ eleventyNavigation:
 </header>
 
 {% set postslist = collections.media %}
-{% include "postslist.njk" %}
+
+<div class="books-grid" id="movies-tv-grid">
+	{%- for post in postslist | reverse %}
+		{% set coverImageSource = post.data.coverImage | default('') %}
+		{% set coverImagePath = '' %}
+		{% if coverImageSource %}
+			{% if coverImageSource.startsWith('/') or coverImageSource.startsWith('http://') or coverImageSource.startsWith('https://') %}
+				{% set coverImagePath = coverImageSource %}
+			{% elif coverImageSource.startsWith('./') %}
+				{% set coverImagePath = post.url ~ (coverImageSource | replace('./', '')) %}
+			{% else %}
+				{% set coverImagePath = post.url ~ 'images/' ~ coverImageSource %}
+			{% endif %}
+		{% endif %}
+
+		{% if coverImagePath %}
+		<article class="book-card">
+			<a href="{{ post.url }}" class="book-card-link" aria-label="Open {{ post.data.title }}">
+				<div class="book-card-image">
+					<img src="{{ coverImagePath }}" alt="{{ post.data.title }} cover">
+				</div>
+			</a>
+		</article>
+		{% endif %}
+	{%- endfor %}
+</div>
