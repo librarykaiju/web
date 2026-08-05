@@ -1,0 +1,1 @@
+We see a pastoral setting. A man is sleeping under a tree at the edge of a river. His horse grazes nearby.

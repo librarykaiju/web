@@ -1,15 +1,15 @@
 ---
-title: "Fear"
+title: Fear
 date: 2020-10-15
-tags: 
-  - "art"
-  - "bela-lugosi"
-  - "blog"
-  - "dracula"
-  - "painting"
-  - "pop-art"
-  - "vampires"
-coverImage: "./IMG_1764-1.jpg"
+tags:
+  - art
+  - bela-lugosi
+  - blog
+  - dracula
+  - painting
+  - pop-art
+  - vampires
+coverImage: IMG_1764-1.jpg
 ---
 
 ![](images/IMG_1764-1.jpg)![](images/Drac-scaled-1.jpg)

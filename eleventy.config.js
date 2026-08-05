@@ -5,9 +5,23 @@ import pluginNavigation from "@11ty/eleventy-navigation";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 
 import pluginFilters from "./_config/filters.js";
+import pluginObsidianLinks from "./_config/obsidianLinks.js";
 
 const CALENDAR_TAGS = new Set(["posts", "books", "games", "media", "movies", "tv", "music", "sketchbooks", "notes"]);
 const CALENDAR_LAYOUTS = new Set(["layouts/post.njk", "layouts/log.njk", "layouts/sketch.njk"]);
+
+function normalizeTags(tags) {
+	const rawTags = Array.isArray(tags)
+		? tags
+		: typeof tags === "string"
+			? tags.split(",")
+			: [];
+
+	return [...new Set(rawTags
+		.map(tag => String(tag).trim())
+		.map(tag => tag.replace(/^#+/, ""))
+		.filter(Boolean))];
+}
 
 function getDateKey(dateObj) {
 	return [
@@ -54,6 +68,14 @@ export default async function(eleventyConfig) {
 		if(data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
 			return false;
 		}
+	});
+
+	eleventyConfig.addPreprocessor("normalize-tags", "*", data => {
+		if (!data || !data.tags) {
+			return;
+		}
+
+		data.tags = normalizeTags(data.tags);
 	});
 
 	eleventyConfig.addCollection("calendarEntries", collectionApi => {
@@ -172,6 +194,9 @@ export default async function(eleventyConfig) {
 
 	// Filters
 	eleventyConfig.addPlugin(pluginFilters);
+	eleventyConfig.addPlugin(pluginObsidianLinks, {
+		contentDir: "content",
+	});
 
 	eleventyConfig.addPlugin(IdAttributePlugin, {
 		// by default we use Eleventy’s built-in `slugify` filter:
