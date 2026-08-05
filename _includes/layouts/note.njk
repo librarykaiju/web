@@ -1,0 +1,20 @@
+---
+layout: layouts/base2.njk
+---
+<style>{% include "css/notes-feed.css" %}</style>
+
+<article class="note-single">
+  <header class="note-single__header">
+    <p class="note-single__kicker">Antisocial Media</p>
+    <h1>{{ title or "Note" }}</h1>
+    <p class="note-single__meta">
+      <time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate("LLLL d, yyyy") }}</time>
+    </p>
+  </header>
+
+  <div class="note-single__content">
+    {{ content | safe }}
+  </div>
+
+  <p class="note-single__back"><a href="/notes/">← Back to Notes</a></p>
+</article>

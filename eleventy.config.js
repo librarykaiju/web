@@ -6,6 +6,43 @@ import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 
 import pluginFilters from "./_config/filters.js";
 
+const CALENDAR_TAGS = new Set(["posts", "books", "games", "media", "movies", "tv", "music", "sketchbooks", "notes"]);
+const CALENDAR_LAYOUTS = new Set(["layouts/post.njk", "layouts/log.njk", "layouts/sketch.njk"]);
+
+function getDateKey(dateObj) {
+	return [
+		dateObj.getUTCFullYear(),
+		String(dateObj.getUTCMonth() + 1).padStart(2, "0"),
+		String(dateObj.getUTCDate()).padStart(2, "0")
+	].join("-");
+}
+
+function hasCalendarTag(tags) {
+	if (!tags) {
+		return false;
+	}
+
+	if (Array.isArray(tags)) {
+		return tags.some(tag => CALENDAR_TAGS.has(tag));
+	}
+
+	return CALENDAR_TAGS.has(tags);
+}
+
+function getCalendarEntries(collectionApi) {
+	return collectionApi.getAll().filter(item => {
+		if (!(item.date instanceof Date) || Number.isNaN(item.date.valueOf())) {
+			return false;
+		}
+
+		if (!item.url || item.url === "/" || item.data.eleventyExcludeFromCollections) {
+			return false;
+		}
+
+		return CALENDAR_LAYOUTS.has(item.data.layout) || hasCalendarTag(item.data.tags);
+	}).sort((a, b) => b.date - a.date);
+}
+
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function(eleventyConfig) {
 	// Drafts, see also _data/eleventyDataSchema.js
@@ -17,6 +54,31 @@ export default async function(eleventyConfig) {
 		if(data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
 			return false;
 		}
+	});
+
+	eleventyConfig.addCollection("calendarEntries", collectionApi => {
+		return getCalendarEntries(collectionApi);
+	});
+
+	eleventyConfig.addCollection("calendarDays", collectionApi => {
+		const groupedByDate = new Map();
+
+		for (const entry of getCalendarEntries(collectionApi)) {
+			const dateKey = getDateKey(entry.date);
+			if (!groupedByDate.has(dateKey)) {
+				groupedByDate.set(dateKey, []);
+			}
+
+			groupedByDate.get(dateKey).push(entry);
+		}
+
+		return Array.from(groupedByDate.entries())
+			.sort((a, b) => b[0].localeCompare(a[0]))
+			.map(([dateKey, entries]) => ({
+				dateKey,
+				url: `/dates/${dateKey}/`,
+				entries,
+			}));
 	});
 
 	// Copy the contents of the `public` folder to the output folder

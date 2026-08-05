@@ -20,7 +20,13 @@
   background: var(--crust);
   color: #ffffff;
   padding: clamp(0.75rem, 2vw, 1.25rem);
-  text-align: center;
+}
+
+.calendar-header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .calendar-header h2 {
@@ -28,6 +34,37 @@
   font-size: clamp(1rem, 2vw, 1.5rem);
   line-height: 1.2;
   color: var(--sapphire);
+  text-align: center;
+  flex: 1;
+}
+
+.calendar-nav-button {
+  width: 1.95rem;
+  height: 1.95rem;
+  border: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
+  border-radius: 999px;
+  background: var(--mantle);
+  color: var(--text);
+  font-size: 1.2rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.12s ease;
+}
+
+.calendar-nav-button:hover {
+  background: var(--rosewater);
+}
+
+.calendar-nav-button:active {
+  transform: scale(0.96);
+}
+
+.calendar-nav-button:focus-visible {
+  outline: 2px solid var(--sapphire);
+  outline-offset: 2px;
 }
 
 /* 7-Column Layout Grid */
@@ -52,22 +89,58 @@
   color: var(--text);
 }
 
-.days-grid div {
-  padding: clamp(0.35rem, 1.1vw, 0.75rem) 0;
+.calendar-day {
+  min-height: clamp(2rem, 3.6vw, 2.6rem);
+  padding: clamp(0.2rem, 0.8vw, 0.45rem) 0;
   font-size: clamp(0.8rem, 1.2vw, 1rem);
   color: #1f2937;
   border-radius: 8px;
-  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
   transition: all 0.2s ease;
 }
 
-.days-grid div:hover {
+.calendar-day--has-posts {
+  cursor: pointer;
+}
+
+.calendar-day--has-posts:hover {
   background-color: var(--rosewater);
 }
 
-/* === CRITICAL PART: Highlight Today's Current Day === */
-.days-grid div.current-day {
+.calendar-day-number {
+  line-height: 1;
+}
+
+.calendar-day-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 0.35rem;
+}
+
+.calendar-day-dot {
+  width: 0.24rem;
+  height: 0.24rem;
+  border-radius: 999px;
+  background-color: var(--sapphire);
+}
+
+.calendar-day--empty {
+  cursor: default;
+}
+
+.calendar-day.current-day {
   background-color: var(--sapphire);
   color: var(--crust);
   font-weight: bold;
+}
+
+.calendar-day.current-day .calendar-day-dot {
+  background-color: var(--crust);
 }

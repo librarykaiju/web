@@ -8,8 +8,8 @@
 .content {
   display: flex;
     flex-direction: column;
-    background-color: var(--crust);
-      background-image: radial-gradient(#b6aea5 15%, transparent 15%);
+    background-color: var(--base);
+      background-image: radial-gradient(#b6aea5 5%, transparent 15%);
   background-size: 15px 15px;
   border-radius: 8px 8px 8px 8px;
   flex: 1;
@@ -25,8 +25,8 @@
 .margin {
   display: flex;
     flex-direction: column;
-    background-color: var(--crust);
-     background-image: radial-gradient(#b6aea5 15%, transparent 15%);
+    background-color: var(--base);
+     background-image: radial-gradient(#b6aea5 5%, transparent 15%);
   background-size: 15px 15px;
   border-radius: 0 8px 8px 0;
   flex: 1;

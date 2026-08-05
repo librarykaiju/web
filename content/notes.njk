@@ -1,0 +1,43 @@
+---js
+const title = "Notes";
+const layout = "layouts/base2.njk";
+const permalink = "/notes/";
+
+const eleventyNavigation = {
+	key: "05 Notes",
+	order: 6,
+};
+---
+<style>{% include "css/notes-feed.css" %}</style>
+
+<header class="notes-hero">
+  <p class="notes-hero__eyebrow">Antisocial Media</p>
+  <h1>Notes</h1>
+  <p class="notes-hero__subtitle">Intrusive thoughts and other sundries.</p>
+</header>
+
+<section class="notes-feed" aria-label="Notes feed">
+{%- set notesList = collections.notes | reverse %}
+{%- for post in notesList %}
+  <article class="note-card">
+    <div class="note-card__avatar" aria-hidden="true"></div>
+    <div class="note-card__body">
+      <header class="note-card__meta">
+        <a class="note-card__name" href="{{ post.url }}">Brandon Johnston</a>
+        <span class="note-card__handle">@brand</span>
+        <span class="note-card__dot" aria-hidden="true">·</span>
+        <a class="note-card__date" href="{{ post.url }}">
+          <time datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLL d") }}</time>
+        </a>
+      </header>
+      <div class="note-card__content">{{ post.templateContent | safe }}</div>
+      <footer class="note-card__footer">
+        <a class="note-card__permalink" href="{{ post.url }}">Open note</a>
+      </footer>
+    </div>
+  </article>
+{%- endfor %}
+{%- if not notesList or notesList.length == 0 %}
+  <p class="notes-feed-empty">No notes yet. Add a markdown file in content/notes to publish your first micro post.</p>
+{%- endif %}
+</section>

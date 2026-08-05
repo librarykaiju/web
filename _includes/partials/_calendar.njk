@@ -2,7 +2,11 @@
 
 <div class="calendar-container">
         <div class="calendar-header">
-          <h2 id="month-year"></h2>
+          <div class="calendar-header-nav">
+            <button id="calendar-prev-month" class="calendar-nav-button" type="button" aria-label="Show previous month">&#x2039;</button>
+            <h2 id="month-year"></h2>
+            <button id="calendar-next-month" class="calendar-nav-button" type="button" aria-label="Show next month">&#x203A;</button>
+          </div>
         </div>
 
         <div class="weekdays">
@@ -18,4 +22,10 @@
         <div class="days-grid" id="days-container">
           <!-- Days will be dynamically injected here -->
         </div>
+
+        <ul id="calendar-date-data" class="calendar-date-data" hidden>
+        {%- for day in collections.calendarDays %}
+          <li data-date="{{ day.dateKey }}" data-url="{{ day.url }}" data-count="{{ day.entries | length }}"></li>
+        {%- endfor %}
+        </ul>
       </div>

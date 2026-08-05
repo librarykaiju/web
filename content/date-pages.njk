@@ -1,0 +1,22 @@
+---js
+const pagination = {
+	data: "collections.calendarDays",
+	size: 1,
+	alias: "day",
+};
+
+const eleventyExcludeFromCollections = true;
+
+const permalink = data => {
+	return `/dates/${data.day.dateKey}/`;
+};
+
+const eleventyComputed = {
+	title: data => `Entries for ${data.day.dateKey}`,
+};
+---
+<h1>Entries for {{ day.entries[0].date | readableDate("LLLL d, yyyy") }}</h1>
+<p>{{ day.entries | length }} entr{% if (day.entries | length) == 1 %}y{% else %}ies{% endif %} posted on this date.</p>
+
+{% set postslist = day.entries %}
+{% include "postslist.njk" %}
