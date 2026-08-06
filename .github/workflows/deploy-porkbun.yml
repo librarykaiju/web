@@ -9,10 +9,55 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      CONTENT_REPO_DIR: .obsidian-content
+      SOURCE_BLOG_DIR: "02 Pages"
+      SOURCE_BOOKS_DIR: "04 Logs/04.01 Books"
+      SOURCE_GAMES_DIR: "04 Logs/04.02 Games"
+      SOURCE_INFO_DIR: "01 Info"
+      SOURCE_MOVIES_TV_DIR: "04 Logs/04.03 Movies & TV"
+      SOURCE_MUSIC_DIR: "04 Logs/04.04 Music"
+      SOURCE_NOTES_DIR: "05 Notes"
+      SOURCE_SKETCHBOOKS_DIR: "03 Sketchbooks"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Checkout Obsidian content repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.OBSIDIAN_CONTENT_REPO }}
+          token: ${{ secrets.OBSIDIAN_CONTENT_TOKEN }}
+          path: ${{ env.CONTENT_REPO_DIR }}
+
+      - name: Hydrate content folders from Obsidian repository
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          copy_dir() {
+            local src="$1"
+            local dest="$2"
+
+            if [ ! -d "$src" ]; then
+              echo "::error::Missing source folder: $src"
+              exit 1
+            fi
+
+            rm -rf "$dest"
+            mkdir -p "$dest"
+            cp -a "$src"/. "$dest"/
+          }
+
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_BLOG_DIR" "content/blog"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_BOOKS_DIR" "content/books"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_GAMES_DIR" "content/games"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_INFO_DIR" "content/info"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_MOVIES_TV_DIR" "content/movies-tv"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_MUSIC_DIR" "content/music"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_NOTES_DIR" "content/notes"
+          copy_dir "$CONTENT_REPO_DIR/$SOURCE_SKETCHBOOKS_DIR" "content/sketchbooks"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
