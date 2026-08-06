@@ -51,6 +51,7 @@ const obsidianSharedImageDir = vaultRoot
 	? path.join(vaultRoot, "00 Content", "img")
 	: null;
 const repoSharedImageDir = path.join(process.cwd(), "content", "img");
+const vaultRootNormalized = vaultRoot ? path.resolve(vaultRoot).toLowerCase() : null;
 
 function normalizeTags(tags) {
 	const rawTags = Array.isArray(tags)
@@ -140,6 +141,11 @@ function normalizeGeneratedImageUrls(content = "", outputPath = "") {
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function(eleventyConfig) {
+	eleventyConfig.ignores.add("content/info/content/**");
+	eleventyConfig.ignores.add("content/info/_includes/**");
+	eleventyConfig.ignores.add("content/info/_data/**");
+	eleventyConfig.ignores.add("content/info/_config/**");
+
 	// Drafts, see also _data/eleventyDataSchema.js
 	eleventyConfig.addPreprocessor("drafts", "*", (data, content) => {
 		if (data.draft) {
@@ -212,6 +218,11 @@ export default async function(eleventyConfig) {
 	}
 
 	for (const attachmentDir of obsidianAttachmentDirs) {
+		const normalizedAttachmentDir = path.resolve(attachmentDir).toLowerCase();
+		if (vaultRootNormalized && normalizedAttachmentDir === vaultRootNormalized) {
+			continue;
+		}
+
 		eleventyConfig.addPassthroughCopy({
 			[attachmentDir]: `/attachments/${path.basename(attachmentDir).toLowerCase()}/`
 		});
@@ -359,4 +370,5 @@ export const config = {
 	// folder name and does **not** affect where things go in the output folder.
 
 	// pathPrefix: "/",
+
 };
