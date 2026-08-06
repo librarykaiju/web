@@ -74,6 +74,15 @@ jobs:
           copy_dir "$SOURCE_ROOT/$SOURCE_NOTES_DIR" "content/notes"
           copy_dir "$SOURCE_ROOT/$SOURCE_SKETCHBOOKS_DIR" "content/sketchbooks"
 
+          # Guard against accidental nested site folders in the Obsidian repo
+          # (e.g. content/info/content/movies-tv.njk), which cause duplicate permalink outputs.
+          for dir in content/blog content/books content/games content/info content/movies-tv content/music content/notes content/sketchbooks; do
+            if [ -d "$dir/content" ]; then
+              echo "Removing nested site folder copied into $dir/content"
+              rm -rf "$dir/content"
+            fi
+          done
+
       - name: Verify hydrated content
         shell: bash
         run: |
