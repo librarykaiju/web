@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONTENT_REPO_DIR: .obsidian-content
+      CONTENT_REPO_BASE_DIR: "${{ secrets.OBSIDIAN_CONTENT_BASE_DIR }}"
       SOURCE_BLOG_DIR: "02 Pages"
       SOURCE_BOOKS_DIR: "04 Logs/04.01 Books"
       SOURCE_GAMES_DIR: "04 Logs/04.02 Games"
@@ -36,6 +37,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          SOURCE_ROOT="$CONTENT_REPO_DIR"
+          if [ -n "${CONTENT_REPO_BASE_DIR:-}" ]; then
+            SOURCE_ROOT="$CONTENT_REPO_DIR/$CONTENT_REPO_BASE_DIR"
+          fi
+
           copy_dir() {
             local src="$1"
             local dest="$2"
@@ -50,14 +56,29 @@ jobs:
             cp -a "$src"/. "$dest"/
           }
 
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_BLOG_DIR" "content/blog"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_BOOKS_DIR" "content/books"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_GAMES_DIR" "content/games"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_INFO_DIR" "content/info"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_MOVIES_TV_DIR" "content/movies-tv"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_MUSIC_DIR" "content/music"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_NOTES_DIR" "content/notes"
-          copy_dir "$CONTENT_REPO_DIR/$SOURCE_SKETCHBOOKS_DIR" "content/sketchbooks"
+          copy_dir "$SOURCE_ROOT/$SOURCE_BLOG_DIR" "content/blog"
+          copy_dir "$SOURCE_ROOT/$SOURCE_BOOKS_DIR" "content/books"
+          copy_dir "$SOURCE_ROOT/$SOURCE_GAMES_DIR" "content/games"
+          copy_dir "$SOURCE_ROOT/$SOURCE_INFO_DIR" "content/info"
+          copy_dir "$SOURCE_ROOT/$SOURCE_MOVIES_TV_DIR" "content/movies-tv"
+          copy_dir "$SOURCE_ROOT/$SOURCE_MUSIC_DIR" "content/music"
+          copy_dir "$SOURCE_ROOT/$SOURCE_NOTES_DIR" "content/notes"
+          copy_dir "$SOURCE_ROOT/$SOURCE_SKETCHBOOKS_DIR" "content/sketchbooks"
+
+      - name: Verify hydrated content
+        shell: bash
+        run: |
+          set -euo pipefail
+          BLOG_MD_COUNT=$(find content/blog -type f \( -name "*.md" -o -name "*.njk" \) | wc -l | tr -d ' ')
+          BOOK_MD_COUNT=$(find content/books -type f \( -name "*.md" -o -name "*.njk" \) | wc -l | tr -d ' ')
+          GAME_MD_COUNT=$(find content/games -type f \( -name "*.md" -o -name "*.njk" \) | wc -l | tr -d ' ')
+
+          echo "Hydrated content counts: blog=$BLOG_MD_COUNT books=$BOOK_MD_COUNT games=$GAME_MD_COUNT"
+
+          if [ "$BLOG_MD_COUNT" -eq 0 ] && [ "$BOOK_MD_COUNT" -eq 0 ] && [ "$GAME_MD_COUNT" -eq 0 ]; then
+            echo "::error::Hydration copied zero core content files. Check OBSIDIAN_CONTENT_REPO and optional OBSIDIAN_CONTENT_BASE_DIR."
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -70,6 +91,21 @@ jobs:
 
       - name: Build Eleventy site
         run: npm run build
+
+      - name: Verify generated site content
+        shell: bash
+        run: |
+          set -euo pipefail
+          BLOG_HTML_COUNT=$(find _site/blog -type f -name "index.html" | wc -l | tr -d ' ')
+          BOOK_HTML_COUNT=$(find _site/books -type f -name "index.html" | wc -l | tr -d ' ')
+          GAME_HTML_COUNT=$(find _site/games -type f -name "index.html" | wc -l | tr -d ' ')
+
+          echo "Generated pages: blog=$BLOG_HTML_COUNT books=$BOOK_HTML_COUNT games=$GAME_HTML_COUNT"
+
+          if [ "$BLOG_HTML_COUNT" -eq 0 ] && [ "$BOOK_HTML_COUNT" -eq 0 ] && [ "$GAME_HTML_COUNT" -eq 0 ]; then
+            echo "::error::Build completed but produced no core content pages."
+            exit 1
+          fi
 
       - name: Deploy _site to Porkbun
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
