@@ -14,7 +14,7 @@ layout: layouts/base2.njk
 		<div class="log-meta-column">
 			{% if coverImage %}
 			<div class="log-image">
-				<img src="{{ coverImage }}" alt="{{ title }} cover image">
+				<img src="{{ coverImage | safe }}" alt="{{ title }} cover image" eleventy:ignore>
 			</div>
 			{% endif %}
 		</div>
@@ -23,33 +23,50 @@ layout: layouts/base2.njk
 		<div class="log-title-row">
 			<h1>{{ title }}</h1>
 			{% if shelf %}
-			{% set shelfValue = shelf | lower %}
-			<div class="shelf-badge{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %} shelf-badge--finished{% elseif shelfValue == 'reading' or shelfValue == 'currently-reading' or shelfValue == 'currently reading' %} shelf-badge--reading{% elseif shelfValue == 'tbr' or shelfValue == 'to-be-read' or shelfValue == 'to be read' %} shelf-badge--tbr{% elseif shelfValue == 'dnf' or shelfValue == 'did-not-finish' or shelfValue == 'did not finish' %} shelf-badge--dnf{% endif %}">{{ shelf }}</div>
+			{% set shelfText = shelf | stringifyValue %}
+			{% set shelfValue = shelfText | lower %}
+			<div class="shelf-badge{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %} shelf-badge--finished{% elseif shelfValue == 'reading' or shelfValue == 'currently-reading' or shelfValue == 'currently reading' %} shelf-badge--reading{% elseif shelfValue == 'tbr' or shelfValue == 'to-be-read' or shelfValue == 'to be read' %} shelf-badge--tbr{% elseif shelfValue == 'dnf' or shelfValue == 'did-not-finish' or shelfValue == 'did not finish' %} shelf-badge--dnf{% endif %}">{{ shelfText }}</div>
 			{% endif %}
 		</div>
 		<ul class="log-metadata" style="list-style-type: none; padding: 0; margin: 0;">
+			{% if alternateTitle %}
+			<li><strong>Alternate title:</strong> {{ alternateTitle | stringifyValue }}</li>
+			{% endif %}
+
+			{% if mediaType %}
+			<li><strong>Type:</strong> {{ mediaType | stringifyValue }}</li>
+			{% endif %}
+
 			{% if author %}
-			<li><strong>Author:</strong> {{ author }}</li>
+			<li><strong>Author:</strong> {{ author | stringifyValue }}</li>
 			{% endif %}
 
 			{% if series %}
-			<li><strong>Series:</strong> {{ series }}</li>
+			<li><strong>Series:</strong> {{ series | stringifyValue }}</li>
 			{% endif %}
 
 			{% if format %}
-			<li><strong>Format:</strong> {{ format }}</li>
+			<li><strong>Format:</strong> {{ format | stringifyValue }}</li>
 			{% endif %}
 
 			{% if classification %}
-			<li><strong>Classification:</strong> {{ classification }}</li>
+			<li><strong>Classification:</strong> {{ classification | stringifyValue }}</li>
 			{% endif %}
 
-			{% if genre %}
-			<li><strong>Genre:</strong> {{ genre }}</li>
+			{% if genre or genres %}
+			<li><strong>Genre:</strong> {{ (genre or genres) | stringifyValue }}</li>
 			{% endif %}
 
 			{% if publisher %}
-			<li><strong>Publisher:</strong> {{ publisher }}</li>
+			<li><strong>Publisher:</strong> {{ publisher | stringifyValue }}</li>
+			{% endif %}
+
+			{% if developer %}
+			<li><strong>Developer:</strong> {{ developer | stringifyValue }}</li>
+			{% endif %}
+
+			{% if writers %}
+			<li><strong>Writer:</strong> {{ writers | stringifyValue }}</li>
 			{% endif %}
 
 			{% if externalUrl %}
@@ -59,7 +76,7 @@ layout: layouts/base2.njk
 			{% if subject %}
 			<li>
 				<span class="subject-label"><strong>Subjects:</strong></span>
-				{% set subjectValues = subject.split(',') %}
+				{% set subjectValues = subject | valueList %}
 				{% for subjectValue in subjectValues %}
 				<span class="subject-item">{{ subjectValue | trim }}</span>
 				{% endfor %}
@@ -69,7 +86,7 @@ layout: layouts/base2.njk
 			{% if subjects %}
 			<li>
 				<span class="subject-label"><strong>Subjects:</strong></span>
-				{% set subjectValues = subjects.split(',') %}
+				{% set subjectValues = subjects | valueList %}
 				{% for subjectValue in subjectValues %}
 				<span class="subject-item">{{ subjectValue | trim }}</span>
 				{% endfor %}
@@ -79,7 +96,7 @@ layout: layouts/base2.njk
 			{% if vibes %}
 			<li>
 				<span class="subject-label"><strong>Vibes:</strong></span>
-				{% set vibeValues = vibes.split(',') %}
+				{% set vibeValues = vibes | valueList %}
 				{% for vibeValue in vibeValues %}
 				<span class="vibe-item">{{ vibeValue | trim }}</span>
 				{% endfor %}
@@ -87,35 +104,59 @@ layout: layouts/base2.njk
 			{% endif %}
 
 			{% if completed %}
-			<li><strong>Completed in:</strong> {{ completed }}</li>
+			<li><strong>Completed in:</strong> {{ completed | stringifyValue }}</li>
+			{% endif %}
+
+			{% if releasedOn %}
+			<li><strong>Released:</strong> {{ releasedOn | stringifyValue }}</li>
+			{% endif %}
+
+			{% if lastRead %}
+			<li><strong>Last read:</strong> {{ lastRead | stringifyValue }}</li>
+			{% endif %}
+
+			{% if lastWatched %}
+			<li><strong>Last watched:</strong> {{ lastWatched | stringifyValue }}</li>
 			{% endif %}
 
 			{% if rating %}
-			<li><strong>Rating:</strong> {{ rating }}</li>
+			<li><strong>Rating:</strong> {{ rating | stringifyValue }}</li>
+			{% endif %}
+
+			{% if onlineRating %}
+			<li><strong>Online rating:</strong> {{ onlineRating | stringifyValue }}</li>
 			{% endif %}
 
 			{% if studio %}
-			<li><strong>Studio:</strong> {{ studio }}</li>
+			<li><strong>Studio:</strong> {{ studio | stringifyValue }}</li>
 			{% endif %}
 
 			{% if platform %}
-			<li><strong>Platform:</strong> {{ platform }}</li>
+			<li><strong>Platform:</strong> {{ platform | stringifyValue }}</li>
 			{% endif %}
 
 			{% if performers %}
-			<li><strong>Performers:</strong> {{ performers }}</li>
+			<li><strong>Performers:</strong> {{ performers | stringifyValue }}</li>
 			{% endif %}
 
 			{% if director %}
-			<li><strong>Director:</strong> {{ director }}</li>
+			<li><strong>Director:</strong> {{ director | stringifyValue }}</li>
 			{% endif %}
 
 			{% if medium %}
-			<li><strong>Medium:</strong> {{ medium }}</li>
+			<li><strong>Medium:</strong> {{ medium | stringifyValue }}</li>
 			{% endif %}
 
 			{% if artist %}
-			<li><strong>Artist:</strong> {{ artist }}</li>
+			<li><strong>Artist:</strong> {{ artist | stringifyValue }}</li>
+			{% endif %}
+
+			{% if streamingServices %}
+			<li><strong>Streaming:</strong> {{ streamingServices | stringifyValue }}</li>
+			{% endif %}
+
+			{% if dataSource %}
+			<li><strong>Source:</strong> {{ dataSource | stringifyValue }}</li>
 			{% endif %}
 
 		</ul>

@@ -66,6 +66,14 @@
 	font-size: clamp(1rem, 2vw, 1.35rem);
 	font-weight: 700;
 	letter-spacing: 0.04em;
+	overflow: hidden;
+}
+
+.logo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .nav a[href],
@@ -237,7 +245,7 @@
 <div class="sidebar">
 	<div class="header">
 		<div class="logo" aria-hidden="true">
-			<span class="logo-mark">BJ</span>
+			<img src="/img/logo.png" alt="" eleventy:ignore>
 		</div>
 		<div class="title">Thoughts & Scribbles</div>
 	</div>

@@ -145,7 +145,7 @@ p{
 	margin-top: 1.5rem;
 }
 
-@media (max-width: 724px) {
+@media (max-width: 960px) {
 	.log-header {
 		flex-direction: column;
 	}
@@ -163,6 +163,20 @@ p{
 
 	.log-image {
 		flex-basis: auto;
+		width: 100%;
+	}
+
+	.log-image img {
+		width: 100%;
+	}
+
+	.log-metadata {
+		display: block;
+		width: 100%;
+	}
+
+	.summary,
+	.post-content {
 		width: 100%;
 	}
 }

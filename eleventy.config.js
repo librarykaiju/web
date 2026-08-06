@@ -3,12 +3,54 @@ import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
+import fs from "node:fs";
+import path from "node:path";
 
 import pluginFilters from "./_config/filters.js";
 import pluginObsidianLinks from "./_config/obsidianLinks.js";
+import { normalizeObsidianData } from "./_config/obsidianFrontmatter.js";
 
 const CALENDAR_TAGS = new Set(["posts", "books", "games", "media", "movies", "tv", "music", "sketchbooks", "notes"]);
 const CALENDAR_LAYOUTS = new Set(["layouts/post.njk", "layouts/log.njk", "layouts/sketch.njk"]);
+const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".avif"]);
+
+function findVaultRoot() {
+	const contentRoot = path.join(process.cwd(), "content");
+	const priorityDirs = ["blog", "books", "games", "movies-tv", "music", "notes", "sketchbooks", "info"];
+
+	for (const dirName of priorityDirs) {
+		const symlinkPath = path.join(contentRoot, dirName);
+		try {
+			const stats = fs.lstatSync(symlinkPath);
+			if (!stats.isSymbolicLink()) {
+				continue;
+			}
+
+			const resolvedPath = fs.realpathSync(symlinkPath);
+			const normalized = resolvedPath.replace(/\\/g, "/");
+			const journalIndex = normalized.toLowerCase().indexOf("/journal/");
+			if (journalIndex !== -1) {
+				return resolvedPath.slice(0, journalIndex + "/Journal".length);
+			}
+		} catch {
+			continue;
+		}
+	}
+
+	return null;
+}
+
+const vaultRoot = findVaultRoot();
+const obsidianAttachmentDirs = vaultRoot
+	? [
+		path.join(vaultRoot, "Content", "Media"),
+		path.join(vaultRoot),
+	].filter(dirPath => fs.existsSync(dirPath))
+	: [];
+const obsidianSharedImageDir = vaultRoot
+	? path.join(vaultRoot, "00 Content", "img")
+	: null;
+const repoSharedImageDir = path.join(process.cwd(), "content", "img");
 
 function normalizeTags(tags) {
 	const rawTags = Array.isArray(tags)
@@ -57,6 +99,45 @@ function getCalendarEntries(collectionApi) {
 	}).sort((a, b) => b.date - a.date);
 }
 
+function rewriteRelativeMarkdownImages(content = "", page = {}) {
+	if (!content || !content.includes("![")) {
+		return content;
+	}
+
+	const inputPath = page.inputPath ? page.inputPath.replace(/\\/g, "/") : "";
+	if (!inputPath.startsWith("content/")) {
+		return content;
+	}
+
+	const pageDir = path.posix.dirname(inputPath.slice("content/".length));
+
+	return content.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (fullMatch, altText, rawTarget) => {
+		const target = String(rawTarget).trim();
+		if (!target || /^(?:[a-z]+:)?\/\//i.test(target) || target.startsWith("/") || target.startsWith("data:")) {
+			return fullMatch;
+		}
+
+		const cleanTarget = target.split(/\s+"/)[0];
+		if (!IMAGE_EXTENSIONS.has(path.extname(cleanTarget).toLowerCase())) {
+			return fullMatch;
+		}
+
+		const resolvedTarget = path.posix.join("/", pageDir, cleanTarget.replace(/^\.\//, ""));
+		return `<img src="${resolvedTarget}" alt="${altText}" eleventy:ignore>`;
+	});
+}
+
+function normalizeGeneratedImageUrls(content = "", outputPath = "") {
+	if (typeof outputPath !== "string" || !outputPath.endsWith(".html") || !content.includes("content\\")) {
+		return content;
+	}
+
+	return content.replace(/\b(src|poster)=(["'])content\\([^"']+?\.(?:png|jpe?g|gif|webp|svg|avif|ico))\2/gi, (fullMatch, attr, quote, rawTarget) => {
+		const normalizedTarget = rawTarget.replace(/\\/g, "/").replace(/^content\//, "");
+		return `${attr}=${quote}/${normalizedTarget}${quote}`;
+	});
+}
+
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function(eleventyConfig) {
 	// Drafts, see also _data/eleventyDataSchema.js
@@ -76,6 +157,14 @@ export default async function(eleventyConfig) {
 		}
 
 		data.tags = normalizeTags(data.tags);
+	});
+
+	eleventyConfig.addPreprocessor("normalize-obsidian-frontmatter", "*", data => {
+		normalizeObsidianData(data);
+	});
+
+	eleventyConfig.addPreprocessor("rewrite-relative-markdown-images", "md", (data, content) => {
+		return rewriteRelativeMarkdownImages(content, data.page || {});
 	});
 
 	eleventyConfig.addCollection("calendarEntries", collectionApi => {
@@ -112,10 +201,21 @@ export default async function(eleventyConfig) {
 		.addPassthroughCopy({
 			"./content/img/": "/img/"
 		})
-		.addPassthroughCopy({
-			"./content/books/": "/books/"
-		})
+		.addPassthroughCopy("./content/**/images/**/*.{svg,webp,png,jpg,jpeg,gif,avif}")
 		.addPassthroughCopy("./content/feed/pretty-atom-feed.xsl");
+
+	// Avoid duplicate output collisions when repo-local content/img already maps to /img/.
+	if (obsidianSharedImageDir && fs.existsSync(obsidianSharedImageDir) && !fs.existsSync(repoSharedImageDir)) {
+		eleventyConfig.addPassthroughCopy({
+			[obsidianSharedImageDir]: "/img/"
+		});
+	}
+
+	for (const attachmentDir of obsidianAttachmentDirs) {
+		eleventyConfig.addPassthroughCopy({
+			[attachmentDir]: `/attachments/${path.basename(attachmentDir).toLowerCase()}/`
+		});
+	}
 		
 
 	// Run Eleventy when these files change:
@@ -196,6 +296,7 @@ export default async function(eleventyConfig) {
 	eleventyConfig.addPlugin(pluginFilters);
 	eleventyConfig.addPlugin(pluginObsidianLinks, {
 		contentDir: "content",
+		attachmentDirs: obsidianAttachmentDirs,
 	});
 
 	eleventyConfig.addPlugin(IdAttributePlugin, {
@@ -215,6 +316,10 @@ export default async function(eleventyConfig) {
 	// https://www.11ty.dev/docs/copy/#emulate-passthrough-copy-during-serve
 
 	// eleventyConfig.setServerPassthroughCopyBehavior("passthrough");
+
+	eleventyConfig.addTransform("normalize-generated-image-urls", (content, outputPath) => {
+		return normalizeGeneratedImageUrls(content, outputPath);
+	});
 };
 
 export const config = {

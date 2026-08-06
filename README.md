@@ -43,6 +43,29 @@ npx @11ty/eleventy --serve
 
 Or you can run [debug mode](https://www.11ty.dev/docs/debugging/) to see all the internals.
 
+## Obsidian Front Matter
+
+This site can ingest Markdown and front matter directly from an Obsidian vault, including symlinked content folders. The compatibility layer lives in [_config/obsidianFrontmatter.js](c:/Users/brand/OneDrive/Documents/web/_config/obsidianFrontmatter.js) and normalizes vault-specific field shapes before templates render.
+
+Supported patterns:
+
+- Scalar-or-list coercion for fields like `author`, `genre`, `subject`, `vibes`, `publisher`, `developer`, `writers`, and `streamingServices`
+- Key aliases such as `genres -> genre`, `subjects -> subject`, `plot -> summary`, `read in -> completed`, `personalRating -> rating`, `cover|image -> coverImage`, `actors -> performers`, `publishers -> publisher`, `developers -> developer`, `subType -> medium`, `type -> mediaType`, `premiere|releaseDate -> releasedOn`, and `englishTitle -> alternateTitle`
+- Asset path normalization for vault media paths like `00 Content/Media/...`, repo-local `content/img/...`, external URLs, and local per-entry `./images/...` paths
+- Draft and underscore-prefixed scratch notes can keep unresolved Obsidian links without flooding normal builds with warnings
+
+If you add a new Obsidian field shape, update the alias map in [_config/obsidianFrontmatter.js](c:/Users/brand/OneDrive/Documents/web/_config/obsidianFrontmatter.js) instead of patching individual templates.
+
+### Validation
+
+Run this before or after changing the compatibility map:
+
+```bash
+npm run validate:obsidian-frontmatter
+```
+
+The validator uses fixture cases from [scripts/obsidian-frontmatter.fixtures.mjs](c:/Users/brand/OneDrive/Documents/web/scripts/obsidian-frontmatter.fixtures.mjs) and asserts the normalized output produced by [_config/obsidianFrontmatter.js](c:/Users/brand/OneDrive/Documents/web/_config/obsidianFrontmatter.js). Add a fixture when you introduce a new front matter pattern so future changes fail predictably.
+
 ## Features
 
 - Using [Eleventy v3](https://github.com/11ty/eleventy/releases/tag/v3.0.0) with zero-JavaScript output.

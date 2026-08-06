@@ -1,8 +1,0 @@
-import { withCollectionDefaults } from "../../_config/collectionDefaults.js";
-
-export default withCollectionDefaults({
-	tags: ["media", "movies", "tv"],
-	parent: ["logs"],
-	layout: "layouts/log.njk",
-	defaultTitle: "Media Entry",
-});

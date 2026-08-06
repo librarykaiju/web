@@ -20,7 +20,7 @@ layout: layouts/base2.njk
 <hr>
 
 {% if coverImage %}
-  <img src="{{ coverImage }}" alt="{{ title }}" class="cover-image">
+	<img src="{{ coverImage | safe }}" alt="{{ title }}" class="cover-image" eleventy:ignore>
 {% endif %}
 
 {{ content | safe }}

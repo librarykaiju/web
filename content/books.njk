@@ -37,7 +37,8 @@ eleventyNavigation:
 
 <div class="books-grid" id="books-grid">
 	{%- for post in postslist | reverse %}
-		{% set shelfValue = post.data.shelf | default('') | lower %}
+		{% set shelfText = post.data.shelf | stringifyValue %}
+		{% set shelfValue = shelfText | lower %}
 		{% set shelfClass = '' %}
 		{% if shelfValue == 'finished' or shelfValue == 'complete' or shelfValue == 'completed' %}
 			{% set shelfClass = 'shelf-badge--finished' %}
@@ -51,7 +52,7 @@ eleventyNavigation:
 		{% set coverImageSource = post.data.coverImage | default('') %}
 		{% set coverImagePath = '' %}
 		{% if coverImageSource %}
-			{% if coverImageSource[0] == '/' %}
+			{% if coverImageSource.startsWith('/') or coverImageSource.startsWith('http://') or coverImageSource.startsWith('https://') %}
 				{% set coverImagePath = coverImageSource %}
 			{% elif coverImageSource[0] == '.' %}
 				{% set coverImagePath = post.url ~ coverImageSource | replace('./', '') %}
@@ -59,18 +60,20 @@ eleventyNavigation:
 				{% set coverImagePath = post.url ~ 'images/' ~ coverImageSource %}
 			{% endif %}
 		{% endif %}
-		<article class="book-card" data-genre="{{ post.data.genre | default('uncategorized') | lower }}" data-year="{{ post.data.completed | default('') }}">
-			<a href="{{ post.url }}" class="book-card-link" aria-label="Open {{ post.data.title }}">
-				{% if coverImagePath %}
+		{% set genreText = (post.data.genre or post.data.genres) | stringifyValue %}
+		{% set completedText = post.data.completed | stringifyValue %}
+		{% if coverImagePath %}
+		<article class="book-card" data-genre="{{ genreText | default('uncategorized', true) | lower }}" data-year="{{ completedText }}">
+			<a href="{{ post.url | safe }}" class="book-card-link" aria-label="Open {{ post.data.title }}">
 				<div class="book-card-image">
-					<img src="{{ coverImagePath }}" alt="{{ post.data.title }} cover">
-					{% if post.data.shelf %}
-					<span class="shelf-badge {{ shelfClass }}">{{ post.data.shelf }}</span>
+					<img src="{{ coverImagePath | safe }}" alt="{{ post.data.title }} cover" eleventy:ignore>
+					{% if shelfText %}
+					<span class="shelf-badge {{ shelfClass }}">{{ shelfText }}</span>
 					{% endif %}
 				</div>
-				{% endif %}
 			</a>
 		</article>
+		{% endif %}
 	{%- endfor %}
 </div>
 

@@ -1,3 +1,0 @@
-#parenting 
-- [ ] Dribbling
-- [ ] Control

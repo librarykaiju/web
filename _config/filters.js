@@ -1,5 +1,27 @@
 import { DateTime } from "luxon";
 
+function toValueList(value) {
+	if (Array.isArray(value)) {
+		return value
+			.map(item => String(item ?? "").trim())
+			.filter(Boolean);
+	}
+
+	if (typeof value === "string") {
+		return value
+			.split(",")
+			.map(item => item.trim())
+			.filter(Boolean);
+	}
+
+	if (value === undefined || value === null) {
+		return [];
+	}
+
+	const normalized = String(value).trim();
+	return normalized ? [normalized] : [];
+}
+
 export default function(eleventyConfig) {
 	eleventyConfig.addFilter("readableDate", (dateObj, format, zone) => {
 		// Formatting tokens for Luxon: https://moment.github.io/luxon/#/formatting?id=table-of-tokens
@@ -40,4 +62,8 @@ export default function(eleventyConfig) {
 	eleventyConfig.addFilter("sortAlphabetically", strings =>
 		(strings || []).sort((b, a) => b.localeCompare(a))
 	);
+
+	eleventyConfig.addFilter("valueList", value => toValueList(value));
+
+	eleventyConfig.addFilter("stringifyValue", value => toValueList(value).join(", "));
 };

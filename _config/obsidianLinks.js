@@ -5,6 +5,35 @@ const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".gif", ".webp", ".sv
 const DEFAULT_MAX_EMBED_DEPTH = 4;
 const DEFAULT_REPORT_PATH = "_site/obsidian-links-report.md";
 
+function isUnderscoreContent(inputPath = "") {
+	return /[\\/]_[^\\/]+/.test(inputPath);
+}
+
+function shouldSuppressWarnings(context = {}, options = {}) {
+	if (context?.draft && options.suppressDraftWarnings !== false) {
+		return true;
+	}
+
+	const inputPath = context?.page?.inputPath || "";
+	if (options.suppressUnderscoreWarnings !== false && isUnderscoreContent(inputPath)) {
+		return true;
+	}
+
+	return false;
+}
+
+function asArray(value) {
+	if (Array.isArray(value)) {
+		return value.filter(Boolean);
+	}
+
+	if (value === undefined || value === null || value === false) {
+		return [];
+	}
+
+	return [value];
+}
+
 function normalizePath(value = "") {
 	return value.replace(/\\/g, "/");
 }
@@ -29,6 +58,25 @@ function walkFiles(dirPath) {
 	const files = [];
 	for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
 		const fullPath = path.join(dirPath, entry.name);
+		if (entry.isDirectory() || entry.isSymbolicLink()) {
+			let stats;
+			try {
+				stats = fs.statSync(fullPath);
+			} catch {
+				continue;
+			}
+
+			if (stats.isDirectory()) {
+				files.push(...walkFiles(fullPath));
+				continue;
+			}
+
+			if (stats.isFile()) {
+				files.push(fullPath);
+				continue;
+			}
+		}
+
 		if (entry.isDirectory()) {
 			files.push(...walkFiles(fullPath));
 			continue;
@@ -39,6 +87,51 @@ function walkFiles(dirPath) {
 	}
 
 	return files;
+}
+
+function buildAttachmentIndex(attachmentDirs = []) {
+	const assetByRelPath = new Map();
+	const assetByBaseName = new Map();
+	const preferredByBaseName = new Map();
+
+	for (const [priority, dirPath] of attachmentDirs.entries()) {
+		if (!dirPath || !fs.existsSync(dirPath)) {
+			continue;
+		}
+
+		for (const fullPath of walkFiles(dirPath)) {
+			const relPath = normalizePath(path.relative(dirPath, fullPath));
+			const baseName = path.basename(relPath);
+			const baseKey = normalizeKey(baseName);
+			const entry = {
+				relPath,
+				fullPath,
+				publicPath: normalizePath(path.join("attachments", path.basename(dirPath).toLowerCase(), relPath)),
+				priority,
+			};
+
+			assetByRelPath.set(normalizeKey(relPath), entry);
+
+			const currentPreferred = preferredByBaseName.get(baseKey);
+			if (!currentPreferred || priority < currentPreferred.priority) {
+				preferredByBaseName.set(baseKey, entry);
+				assetByBaseName.set(baseKey, [entry]);
+				continue;
+			}
+
+			if (priority === currentPreferred.priority) {
+				if (!assetByBaseName.has(baseKey)) {
+					assetByBaseName.set(baseKey, []);
+				}
+				assetByBaseName.get(baseKey).push(entry);
+			}
+		}
+	}
+
+	return {
+		assetByRelPath,
+		assetByBaseName,
+	};
 }
 
 function buildContentIndex(contentDir) {
@@ -86,6 +179,34 @@ function buildContentIndex(contentDir) {
 	return {
 		markdownByRelStem,
 		markdownByBaseName,
+		assetByRelPath,
+		assetByBaseName,
+	};
+}
+
+function mergeAssetIndexes(...indexes) {
+	const assetByRelPath = new Map();
+	const assetByBaseName = new Map();
+
+	for (const index of indexes) {
+		for (const [key, value] of index.assetByRelPath.entries()) {
+			if (!assetByRelPath.has(key)) {
+				assetByRelPath.set(key, value);
+			}
+		}
+
+		for (const [key, values] of index.assetByBaseName.entries()) {
+			if (!assetByBaseName.has(key)) {
+				assetByBaseName.set(key, []);
+			}
+
+			for (const value of values) {
+				assetByBaseName.get(key).push(value);
+			}
+		}
+	}
+
+	return {
 		assetByRelPath,
 		assetByBaseName,
 	};
@@ -318,7 +439,7 @@ function convertObsidianLinks(content, context, env, state) {
 	const index = env.getIndex();
 	const inputPath = context?.page?.inputPath || "";
 	const options = env.options;
-	const warn = env.warn;
+	const warn = shouldSuppressWarnings(context, options) ? () => {} : env.warn;
 
 	if ((state.depth || 0) > options.maxEmbedDepth) {
 		warn("embed-depth-limit", "Maximum Obsidian embed depth reached", {
@@ -341,7 +462,7 @@ function convertObsidianLinks(content, context, env, state) {
 			}
 
 			const altText = alias || path.basename(target, path.extname(target));
-			return `![${altText}](${encodeURI(`/${assetEntry.relPath}`)})`;
+			return `<img src="${encodeURI(`/${assetEntry.publicPath || assetEntry.relPath}`)}" alt="${altText}" eleventy:ignore>`;
 		}
 
 		const markdownEntry = resolveMarkdownTarget(target, inputPath, env.contentDir, index, options, warn);
@@ -388,11 +509,14 @@ function convertObsidianLinks(content, context, env, state) {
 export default function pluginObsidianLinks(eleventyConfig, options = {}) {
 	const contentDir = path.resolve(process.cwd(), options.contentDir || "content");
 	const reportPath = path.resolve(process.cwd(), options.reportPath || DEFAULT_REPORT_PATH);
+	const attachmentDirs = asArray(options.attachmentDirs).map(dirPath => path.resolve(process.cwd(), dirPath));
 	const pluginOptions = {
 		warnOnUnresolved: options.warnOnUnresolved !== false,
 		preferFirstOnAmbiguous: options.preferFirstOnAmbiguous === true,
 		embedNotesAsContent: options.embedNotesAsContent !== false,
 		maxEmbedDepth: Number.isInteger(options.maxEmbedDepth) ? options.maxEmbedDepth : DEFAULT_MAX_EMBED_DEPTH,
+		suppressDraftWarnings: options.suppressDraftWarnings !== false,
+		suppressUnderscoreWarnings: options.suppressUnderscoreWarnings !== false,
 	};
 
 	let cachedIndex = null;
@@ -404,7 +528,15 @@ export default function pluginObsidianLinks(eleventyConfig, options = {}) {
 		warn: warningReporter.warn,
 		getIndex: () => {
 			if (!cachedIndex) {
-				cachedIndex = buildContentIndex(contentDir);
+				const contentIndex = buildContentIndex(contentDir);
+				const attachmentIndex = buildAttachmentIndex(attachmentDirs);
+				cachedIndex = {
+					...contentIndex,
+					...mergeAssetIndexes({
+						assetByRelPath: contentIndex.assetByRelPath,
+						assetByBaseName: contentIndex.assetByBaseName,
+					}, attachmentIndex),
+				};
 			}
 			return cachedIndex;
 		},
@@ -416,7 +548,7 @@ export default function pluginObsidianLinks(eleventyConfig, options = {}) {
 
 	eleventyConfig.on("beforeBuild", () => {
 		warningReporter.reset();
-		cachedIndex = buildContentIndex(contentDir);
+		cachedIndex = null;
 	});
 
 	eleventyConfig.on("beforeWatch", () => {

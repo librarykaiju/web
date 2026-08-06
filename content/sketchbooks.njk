@@ -62,13 +62,14 @@ eleventyNavigation:
       {%- set coverSrc = post.url ~ rawCover %}
     {%- endif %}
     <li class="sketch-gallery-item">
-      <a class="sketch-gallery-link" href="{{ post.url }}">
+      <a class="sketch-gallery-link" href="{{ post.url | safe }}">
         <img
           class="sketch-gallery-thumb"
-          src="{{ coverSrc }}"
+          src="{{ coverSrc | safe }}"
           alt="{{ post.data.title or 'Sketchbook entry' }}"
           loading="lazy"
           decoding="async"
+          eleventy:ignore
         >
         
       </a>

@@ -1,3 +1,0 @@
-"At the end of the road, on the edge of the Deep Wood, there stood an old inn. I say the inn was old, but please do not think it shabby. The stones were solid, the wood beams were polished and oiled to a deep gloss, and the stained-glass windows glittered like precious gems in the morning sun. The sign on the inn, which received a fresh coat of paint every spring, read: Welcome to the Lost Home."
-
-![Exported image](Exported%20image%2020260506211121-0.png)
