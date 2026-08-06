@@ -40,7 +40,16 @@ jobs:
           SOURCE_ROOT="$CONTENT_REPO_DIR"
           if [ -n "${CONTENT_REPO_BASE_DIR:-}" ]; then
             SOURCE_ROOT="$CONTENT_REPO_DIR/$CONTENT_REPO_BASE_DIR"
+          else
+            DETECTED_BLOG_DIR="$(find "$CONTENT_REPO_DIR" -type d -path "*/$SOURCE_BLOG_DIR" | head -n 1 || true)"
+            if [ -n "$DETECTED_BLOG_DIR" ]; then
+              SOURCE_ROOT="${DETECTED_BLOG_DIR%/$SOURCE_BLOG_DIR}"
+            fi
           fi
+
+          echo "Using SOURCE_ROOT=$SOURCE_ROOT"
+          echo "Top-level folders in checked out content repo:"
+          ls -la "$CONTENT_REPO_DIR"
 
           copy_dir() {
             local src="$1"
