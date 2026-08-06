@@ -1,0 +1,43 @@
+name: Deploy to Porkbun Hosting
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Eleventy site
+        run: npm run build
+
+      - name: Deploy _site to Porkbun
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.PORKBUN_FTP_HOST }}
+          username: ${{ secrets.PORKBUN_FTP_USERNAME }}
+          password: ${{ secrets.PORKBUN_FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./_site/
+          server-dir: ${{ secrets.PORKBUN_FTP_REMOTE_DIR }}
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
