@@ -46,7 +46,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 723px) {
+@media (max-width: 960px) {
   .marquee {
     display: none;
   }

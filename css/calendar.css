@@ -10,7 +10,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-@media (max-width: 723px) {
+@media (max-width: 960px) {
   .calendar-container {
     display: none;
   }

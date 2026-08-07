@@ -24,7 +24,6 @@ const eleventyNavigation = {
     <div class="note-card__body">
       <header class="note-card__meta">
         <a class="note-card__name" href="{{ post.url }}">Brandon Johnston</a>
-        <span class="note-card__handle">@brand</span>
         <span class="note-card__dot" aria-hidden="true">·</span>
         <a class="note-card__date" href="{{ post.url }}">
           <time datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLL d") }}</time>
@@ -33,6 +32,49 @@ const eleventyNavigation = {
       <div class="note-card__content">{{ post.templateContent | safe }}</div>
       <footer class="note-card__footer">
         <a class="note-card__permalink" href="{{ post.url }}">Open note</a>
+        <div class="note-card__actions">
+          <div class="note-action-group note-action-group--like">
+            <button class="note-action note-action--like" type="button" data-like-button data-note-url="{{ post.url }}" aria-label="Like this note" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 20.4 10.55 19.08C5.4 14.36 2 11.27 2 7.5A5.5 5.5 0 0 1 7.5 2 6 6 0 0 1 12 4.1 6 6 0 0 1 16.5 2 5.5 5.5 0 0 1 22 7.5c0 3.77-3.4 6.86-8.55 11.58Z" />
+              </svg>
+            </button>
+            <span class="note-like-count" data-like-count aria-live="polite">0</span>
+          </div>
+          <div class="note-action-group note-action-group--share">
+            <button class="note-action note-action--share" type="button" data-share-button data-note-url="{{ post.url }}" aria-label="Share this note" aria-haspopup="true" aria-expanded="false" aria-controls="share-menu-{{ loop.index }}">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M19 7a3 3 0 1 0-2.82-4H16a3 3 0 0 0 .18 1L7.91 8.13a3 3 0 0 0-1.82-.63 3 3 0 1 0 1.82 5.37l8.27 4.13a3 3 0 0 0-.18 1 3 3 0 1 0 .91-2.17l-8.27-4.13a3 3 0 0 0 0-1.14l8.27-4.13A3 3 0 0 0 19 7Z" />
+              </svg>
+            </button>
+            <div class="note-share-menu" id="share-menu-{{ loop.index }}" data-share-menu role="group" aria-label="Share options" hidden>
+              <a class="note-share-menu__item" href="#" data-share-target="email" aria-label="Share by email">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M3 5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25v13.5A2.25 2.25 0 0 1 18.75 21H5.25A2.25 2.25 0 0 1 3 18.75V5.25Zm2.2-.45L12 9.36l6.8-4.56H5.2Zm13.55 2.02L12.4 11.1a.75.75 0 0 1-.8 0L5.25 6.82v11.93c0 .14.11.25.25.25h13c.14 0 .25-.11.25-.25V6.82Z" />
+                </svg>
+                <span class="visually-hidden">Email</span>
+              </a>
+              <a class="note-share-menu__item" href="#" data-share-target="x" target="_blank" rel="noopener noreferrer" aria-label="Share to X">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M3 3h4.82l4.24 6.08L17.3 3H21l-7.17 8.2L21.5 21h-4.86l-4.55-6.54L6.28 21H2.5l7.42-8.49L3 3Zm4.1 1.93h-1.5l11.36 16.14h1.53L7.1 4.93Z" />
+                </svg>
+                <span class="visually-hidden">X</span>
+              </a>
+              <a class="note-share-menu__item" href="#" data-share-target="bluesky" target="_blank" rel="noopener noreferrer" aria-label="Share to Bluesky">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M5.4 4.5c2.02 1.5 4.2 4.55 6.6 8.38 2.4-3.83 4.58-6.88 6.6-8.38 1.45-1.08 3.8-1.92 3.8.75 0 .53-.29 4.5-.46 5.14-.58 2.21-2.71 2.77-4.6 2.45 3.31.56 4.15 2.44 2.33 4.32-3.45 3.59-4.96-.9-5.35-2.05-.07-.2-.1-.3-.18-.3s-.11.1-.18.3c-.39 1.15-1.9 5.64-5.35 2.05-1.82-1.88-.98-3.76 2.33-4.32-1.89.32-4.02-.24-4.6-2.45-.17-.64-.46-4.61-.46-5.14 0-2.67 2.35-1.83 3.8-.75Z" />
+                </svg>
+                <span class="visually-hidden">Bluesky</span>
+              </a>
+              <a class="note-share-menu__item" href="#" data-share-target="facebook" target="_blank" rel="noopener noreferrer" aria-label="Share to Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M13.5 21v-8.04h2.7l.4-3.16h-3.1V7.77c0-.91.25-1.54 1.56-1.54h1.66V3.4c-.29-.04-1.26-.12-2.4-.12-2.38 0-4 1.45-4 4.11V9.8H8v3.16h2.32V21h3.18Z" />
+                </svg>
+                <span class="visually-hidden">Facebook</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   </article>
@@ -41,3 +83,179 @@ const eleventyNavigation = {
   <p class="notes-feed-empty">No notes yet. Add a markdown file in content/notes to publish your first micro post.</p>
 {%- endif %}
 </section>
+
+<script>
+(() => {
+  const LIKE_STATE_KEY_PREFIX = "liked-note:";
+  const LIKE_COUNT_KEY_PREFIX = "note-like-count:";
+
+  const getAbsoluteUrl = (url) => new URL(url, window.location.origin).toString();
+
+  const toCountValue = (value) => {
+    const parsed = Number.parseInt(value || "0", 10);
+    if (Number.isNaN(parsed) || parsed < 0) {
+      return 0;
+    }
+
+    return parsed;
+  };
+
+  const buildShareUrls = (noteUrl) => {
+    const shareText = "Check out this note from Brandon Johnston";
+    const encodedUrl = encodeURIComponent(noteUrl);
+    const encodedText = encodeURIComponent(`${shareText}: ${noteUrl}`);
+
+    return {
+      email: `mailto:?subject=${encodeURIComponent("Note from Brandon Johnston")}&body=${encodeURIComponent(`${shareText}\n\n${noteUrl}`)}`,
+      x: `https://x.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+      bluesky: `https://bsky.app/intent/compose?text=${encodedText}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    };
+  };
+
+  const shareButtons = Array.from(document.querySelectorAll("[data-share-button]"));
+
+  const closeShareMenu = (shareButton, shareMenu) => {
+    shareButton.setAttribute("aria-expanded", "false");
+    if (shareMenu.hidden || !shareMenu.classList.contains("is-open")) {
+      shareMenu.classList.remove("is-open");
+      shareMenu.hidden = true;
+      return;
+    }
+
+    shareMenu.classList.remove("is-open");
+    window.setTimeout(() => {
+      if (!shareMenu.classList.contains("is-open")) {
+        shareMenu.hidden = true;
+      }
+    }, 230);
+  };
+
+  const closeAllShareMenus = () => {
+    for (const shareButton of shareButtons) {
+      const shareGroup = shareButton.closest(".note-action-group--share");
+      const shareMenu = shareGroup?.querySelector("[data-share-menu]");
+      if (!shareMenu) {
+        continue;
+      }
+
+      closeShareMenu(shareButton, shareMenu);
+    }
+  };
+
+  for (const button of document.querySelectorAll("[data-like-button]")) {
+    const noteUrl = getAbsoluteUrl(button.dataset.noteUrl || "/notes/");
+    const likeStateStorageKey = `${LIKE_STATE_KEY_PREFIX}${noteUrl}`;
+    const likeCountStorageKey = `${LIKE_COUNT_KEY_PREFIX}${noteUrl}`;
+    const likeCountEl = button.closest(".note-action-group--like")?.querySelector("[data-like-count]");
+
+    let isLiked = localStorage.getItem(likeStateStorageKey) === "1";
+    let likeCount = toCountValue(localStorage.getItem(likeCountStorageKey));
+
+    if (isLiked && likeCount === 0) {
+      likeCount = 1;
+      localStorage.setItem(likeCountStorageKey, "1");
+    }
+
+    if (likeCountEl) {
+      likeCountEl.textContent = String(likeCount);
+      likeCountEl.setAttribute("aria-label", `${likeCount} likes`);
+    }
+
+    button.setAttribute("aria-pressed", isLiked ? "true" : "false");
+    if (isLiked) {
+      button.classList.add("is-active");
+    }
+
+    button.addEventListener("click", () => {
+      const nextLiked = button.getAttribute("aria-pressed") !== "true";
+      button.setAttribute("aria-pressed", nextLiked ? "true" : "false");
+      button.classList.toggle("is-active", nextLiked);
+
+      if (nextLiked !== isLiked) {
+        likeCount = nextLiked ? likeCount + 1 : Math.max(0, likeCount - 1);
+        if (likeCountEl) {
+          likeCountEl.textContent = String(likeCount);
+          likeCountEl.setAttribute("aria-label", `${likeCount} likes`);
+        }
+      }
+
+      localStorage.setItem(likeStateStorageKey, nextLiked ? "1" : "0");
+      localStorage.setItem(likeCountStorageKey, String(likeCount));
+      isLiked = nextLiked;
+    });
+  }
+
+  for (const button of shareButtons) {
+    const shareGroup = button.closest(".note-action-group--share");
+    const shareMenu = shareGroup?.querySelector("[data-share-menu]");
+    if (!shareMenu) {
+      continue;
+    }
+
+    const noteUrl = getAbsoluteUrl(button.dataset.noteUrl || "/notes/");
+    const shareUrls = buildShareUrls(noteUrl);
+
+    for (const link of shareMenu.querySelectorAll("[data-share-target]")) {
+      const target = link.dataset.shareTarget;
+      if (target && shareUrls[target]) {
+        link.href = shareUrls[target];
+      }
+
+      link.addEventListener("click", (event) => {
+        if (target === "email") {
+          event.preventDefault();
+          window.location.href = shareUrls.email;
+        }
+
+        button.classList.add("is-shared");
+        setTimeout(() => button.classList.remove("is-shared"), 900);
+        window.setTimeout(() => {
+          closeAllShareMenus();
+        }, 0);
+      });
+    }
+
+    button.addEventListener("click", () => {
+      const shouldOpen = shareMenu.hidden;
+      closeAllShareMenus();
+
+      if (!shouldOpen) {
+        return;
+      }
+
+      shareMenu.hidden = false;
+      button.setAttribute("aria-expanded", "true");
+      window.requestAnimationFrame(() => {
+        shareMenu.classList.add("is-open");
+      });
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAllShareMenus();
+    }
+  });
+
+  if (navigator.share) {
+    for (const button of shareButtons) {
+      button.addEventListener("dblclick", async () => {
+        const noteUrl = getAbsoluteUrl(button.dataset.noteUrl || "/notes/");
+
+        try {
+          await navigator.share({
+            title: "Note from Brandon Johnston",
+            url: noteUrl,
+          });
+
+          button.classList.add("is-shared");
+          setTimeout(() => button.classList.remove("is-shared"), 900);
+        } catch {
+          // User canceled native share.
+        }
+      });
+    }
+  }
+})();
+</script>

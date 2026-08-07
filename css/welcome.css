@@ -34,7 +34,7 @@
 }
 
 /* Tablet and Desktop */
-@media (min-width: 724px) {
+@media (min-width: 961px) {
   .home {
     flex-direction: row;
     align-items: flex-start;
